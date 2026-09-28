@@ -1,0 +1,12 @@
+# Médias lourds : restent en local ou sur Higgsfield
+renders/**
+!renders/.gitkeep
+*.mp4
+*.mov
+*.webm
+*.wav
+
+# Réglages personnels et secrets
+.claude/settings.local.json
+CLAUDE.local.md
+.env

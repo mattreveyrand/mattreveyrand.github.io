@@ -1,0 +1,363 @@
+<title>Manuel du studio IA</title>
+<meta name="description" content="Claude, Claude Code, Cowork, skills, artefacts, tokens, mémoire et pipeline vidéo Higgsfield (Seedance 2.5, Genjutsu) — en vidéo SVG et en fiches.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+:root {
+  --bg: #EDEFF2;
+  --surface: #FFFFFF;
+  --surface-2: #F5F6F8;
+  --ink: #14181D;
+  --ink-2: #333B45;
+  --mute: #5B6573;
+  --line: #D3D8DF;
+  --stage: #111418;
+  --focus: #2F5FD0;
+  /* barres de mire, versions lisibles sur fond clair */
+  --c-yellow: #8A6A00;
+  --c-cyan: #0E7C84;
+  --c-green: #2F7D3B;
+  --c-magenta: #9B3A8C;
+  --c-red: #B8391F;
+  --c-blue: #2F5FD0;
+  /* pastilles (fond) */
+  --s-yellow: #E8C547;
+  --s-cyan: #3FC1C9;
+  --s-green: #5BBF6A;
+  --s-magenta: #C95CB8;
+  --s-red: #E0533D;
+  --s-blue: #5A86EE;
+  --code-bg: #F1F3F6;
+  --ok: #2F7D3B;
+  --warn: #8A6A00;
+  --bad: #B8391F;
+  --display: 'Big Shoulders Display', 'Arial Narrow', 'Roboto Condensed', sans-serif;
+  --body: 'IBM Plex Sans', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --mono: 'IBM Plex Mono', Consolas, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0E1114; --surface: #161A20; --surface-2: #1B2027; --ink: #E9E7E2; --ink-2: #C9CDD3;
+    --mute: #9AA3AF; --line: #2A313B; --focus: #7FA2F5;
+    --c-yellow: #E8C547; --c-cyan: #5ED0D7; --c-green: #74CC82; --c-magenta: #DA7BCB; --c-red: #F07A62; --c-blue: #85A6F3;
+    --code-bg: #12161B; --ok: #74CC82; --warn: #E8C547; --bad: #F07A62;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0E1114; --surface: #161A20; --surface-2: #1B2027; --ink: #E9E7E2; --ink-2: #C9CDD3;
+  --mute: #9AA3AF; --line: #2A313B; --focus: #7FA2F5;
+  --c-yellow: #E8C547; --c-cyan: #5ED0D7; --c-green: #74CC82; --c-magenta: #DA7BCB; --c-red: #F07A62; --c-blue: #85A6F3;
+  --code-bg: #12161B; --ok: #74CC82; --warn: #E8C547; --bad: #F07A62;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 16px/1.6 var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 20px; }
+a { color: var(--c-blue); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+code, kbd, pre { font-family: var(--mono); font-size: 0.9em; }
+code { background: var(--code-bg); border: 1px solid var(--line); padding: 0.05em 0.35em; border-radius: 3px; word-break: break-word; }
+kbd { border: 1px solid var(--line); border-bottom-width: 2px; padding: 0 0.4em; border-radius: 3px; background: var(--surface); }
+h1, h2, h3 { text-wrap: balance; }
+
+/* en-tête */
+.masthead { padding-block: 36px 16px; display: grid; gap: 12px; }
+.eyebrow { font: 600 13px/1.4 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.eyebrow span:first-child { color: var(--c-yellow); }
+.masthead h1 { font: 800 clamp(38px, 6vw, 64px)/0.95 var(--display); margin: 0; letter-spacing: 0.005em; }
+.lede { max-width: 68ch; font-size: 18px; color: var(--ink-2); margin: 0; }
+
+/* lecteur */
+.player { background: var(--stage); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; margin-top: 12px; box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 18px 40px -24px rgba(0,0,0,.45); }
+.stage { position: relative; aspect-ratio: 16 / 9; max-width: 100%; background: #111418; }
+.stage svg { display: block; width: 100%; height: 100%; }
+.big-play { position: absolute; left: 50%; bottom: 13%; transform: translateX(-50%); font: 600 15px/1 var(--mono); letter-spacing: 0.06em; color: #111418; background: #E8C547; border: 0; border-radius: 3px; padding: 14px 20px; cursor: pointer; box-shadow: 0 8px 24px -8px rgba(0,0,0,.6); }
+.big-play:hover { background: #F2D56A; }
+.big-play:focus-visible { outline: 2px solid #ECE8E1; outline-offset: 3px; }
+.controls { display: flex; align-items: center; gap: 12px; padding: 10px 14px; color: #ECE8E1; font: 500 13px/1 var(--mono); background: #0B0D10; flex-wrap: wrap; }
+.controls button { font: inherit; color: inherit; background: #1E242C; border: 1px solid #2F3845; border-radius: 3px; padding: 8px 12px; cursor: pointer; min-width: 44px; }
+.controls button:hover { background: #262D37; }
+.controls .tc { font-variant-numeric: tabular-nums; letter-spacing: 0.04em; min-width: 21ch; }
+.scrub { flex: 1 1 240px; display: flex; align-items: center; min-width: 160px; }
+.scrub input { width: 100%; accent-color: #E8C547; }
+.edl { background: #0B0D10; color: #ECE8E1; border-top: 1px solid #1E242C; font: 13px/1.3 var(--mono); }
+.edl-cap { margin: 0; padding: 10px 14px 4px; color: #8E98A6; letter-spacing: 0.12em; font-size: 12px; text-transform: uppercase; }
+.edl ol { list-style: none; margin: 0; padding: 0; }
+@media (min-width: 900px) {
+  .edl ol { display: grid; grid-template-columns: 1fr 1fr; column-gap: 1px; background: #161A20; }
+  .edl li { background: #0B0D10; }
+  .edl-head { display: none; }
+}
+.edl-head, .edl button { display: grid; grid-template-columns: 4ch minmax(0, 1fr) 12ch 12ch; gap: 12px; padding: 8px 14px; font-variant-numeric: tabular-nums; }
+.edl-head { color: #8E98A6; letter-spacing: 0.1em; text-transform: uppercase; font-size: 11.5px; border-bottom: 1px solid #1E242C; }
+.edl button { all: unset; box-sizing: border-box; display: grid; grid-template-columns: 4ch minmax(0, 1fr) 12ch 12ch; gap: 12px; padding: 8px 14px; width: 100%; cursor: pointer; border-bottom: 1px solid #161A20; font-variant-numeric: tabular-nums; }
+.edl button:hover, .edl button[aria-current="true"] { background: #161A20; }
+.edl button[aria-current="true"] .ttl { color: #E8C547; }
+.edl button:focus-visible { outline: 2px solid #E8C547; outline-offset: -2px; }
+.edl .sw { display: inline-block; width: 10px; height: 10px; margin-right: 10px; }
+.edl .cut { color: #8E98A6; }
+@media (max-width: 560px) {
+  .edl-head, .edl button { grid-template-columns: 4ch minmax(0, 1fr) 12ch; }
+  .edl-head span:last-child, .edl button span:last-child { display: none; }
+}
+
+/* navigation + sections */
+.layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 40px; margin-top: 48px; align-items: start; }
+.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); font: 500 13px/1.3 var(--mono); }
+.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.toc a { display: grid; grid-template-columns: 4ch 1fr; gap: 6px; color: var(--mute); text-decoration: none; padding: 6px 8px; border-radius: 3px; }
+.toc a:hover { color: var(--ink); background: var(--surface); }
+.toc .n { color: var(--ink-2); }
+.toc-title { font: 600 12px/1 var(--mono); letter-spacing: 0.14em; color: var(--mute); margin: 0 0 10px 8px; text-transform: uppercase; }
+@media (max-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .toc { position: static; }
+  .toc ol { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+}
+
+section.chap { padding-block: 8px 44px; border-top: 1px solid var(--line); }
+section.chap > header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; padding-top: 22px; }
+.plan { font: 600 12px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); display: inline-flex; align-items: center; gap: 8px; }
+.plan i { width: 10px; height: 10px; display: inline-block; }
+section.chap h2 { flex-basis: 100%; font: 800 clamp(34px, 5vw, 50px)/1 var(--display); margin: 6px 0 4px; letter-spacing: 0.005em; }
+.seek { font: 500 12px/1 var(--mono); color: var(--ink-2); background: var(--surface); border: 1px solid var(--line); border-radius: 3px; padding: 6px 9px; cursor: pointer; }
+.seek:hover { border-color: var(--mute); }
+.chap .intro { max-width: 70ch; color: var(--ink-2); font-size: 17px; }
+.chap h3 { font: 700 26px/1.1 var(--display); letter-spacing: 0.01em; margin: 28px 0 10px; }
+.chap p, .chap li { max-width: 72ch; }
+.chap ul, .chap ol { padding-left: 1.2em; }
+.chap li + li { margin-top: 4px; }
+
+.grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-block: 16px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 16px 18px; }
+.panel h4 { margin: 0 0 6px; font: 700 22px/1.1 var(--display); letter-spacing: 0.01em; }
+.panel p { margin: 6px 0; }
+.panel .tag { font: 600 11px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--mute); }
+.panel ul { margin: 8px 0 0; }
+.panel.y { border-top: 3px solid var(--s-yellow); }
+.panel.c { border-top: 3px solid var(--s-cyan); }
+.panel.g { border-top: 3px solid var(--s-green); }
+.panel.m { border-top: 3px solid var(--s-magenta); }
+.panel.r { border-top: 3px solid var(--s-red); }
+.panel.b { border-top: 3px solid var(--s-blue); }
+
+.tbl { overflow-x: auto; margin-block: 16px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); }
+.tbl table { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 620px; }
+.tbl th, .tbl td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.tbl th { font: 600 12px/1.3 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--mute); background: var(--surface-2); }
+.tbl tr:last-child td { border-bottom: 0; }
+.tbl td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.pill { display: inline-block; font: 600 11px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 7px; border-radius: 3px; border: 1px solid currentColor; white-space: nowrap; }
+.pill.must { color: var(--ok); }
+.pill.nice { color: var(--c-blue); }
+.pill.skip { color: var(--mute); }
+.pill.have { color: var(--c-magenta); }
+.pill.warn { color: var(--warn); }
+.pill.bad { color: var(--bad); }
+
+.code { position: relative; margin-block: 14px; }
+.code pre { margin: 0; background: var(--code-bg); border: 1px solid var(--line); border-radius: 4px; padding: 14px 16px; overflow-x: auto; font-size: 13.5px; line-height: 1.55; color: var(--ink); }
+.code .label { font: 600 11px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--mute); margin-bottom: 6px; display: block; }
+.copy { position: absolute; top: 22px; right: 8px; font: 500 12px/1 var(--mono); background: var(--surface); color: var(--ink-2); border: 1px solid var(--line); border-radius: 3px; padding: 6px 8px; cursor: pointer; }
+.code:not(:has(.label)) .copy { top: 8px; }
+
+.callout { border-left: 3px solid var(--s-red); background: var(--surface); padding: 12px 16px; margin-block: 16px; border-radius: 0 4px 4px 0; max-width: 78ch; }
+.callout.info { border-left-color: var(--s-blue); }
+.callout.ok { border-left-color: var(--s-green); }
+.callout strong:first-child { display: block; font: 600 12px/1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+
+.steps { counter-reset: st; list-style: none; padding-left: 0 !important; display: grid; gap: 10px; }
+.steps > li { counter-increment: st; display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: start; }
+.steps > li::before { content: counter(st); font: 800 26px/1 var(--display); color: var(--c-yellow); text-align: right; padding-top: 2px; }
+
+details.more { border: 1px solid var(--line); border-radius: 4px; background: var(--surface); margin-block: 12px; }
+details.more > summary { cursor: pointer; padding: 12px 16px; font-weight: 600; }
+details.more > div { padding: 0 16px 14px; }
+
+.sources { font-size: 13.5px; color: var(--mute); }
+.sources a { color: var(--mute); }
+footer.end { border-top: 1px solid var(--line); padding-block: 28px 56px; color: var(--mute); font-size: 14px; }
+
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+@media (max-width: 520px) {
+  body { font-size: 15.5px; }
+  .controls .tc { min-width: 0; }
+  .lede { font-size: 16.5px; }
+}
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <div class="eyebrow"><span>Claude × Higgsfield</span><span>Manuel de tournage</span><span>Mis à jour le 28.09.2026</span></div>
+    <h1>Le manuel du studio IA</h1>
+    <p class="lede">Comment utiliser Claude, Claude Code et Cowork sans gaspiller de tokens, quelle architecture de dossiers garder, quels skills installer, et comment tourner avec Higgsfield (Seedance 2.5, Genjutsu) sans rater. La vidéo résume ; les fiches dessous donnent les commandes exactes.</p>
+  </header>
+
+  <div class="player" id="player">
+    <div class="stage" id="stage">
+{{SVG}}
+      <button type="button" class="big-play" id="big-play" aria-label="Lire la vidéo depuis le début"><span aria-hidden="true">▶</span> Lire · 3 min</button>
+    </div>
+    <div class="controls" role="group" aria-label="Lecture de la vidéo">
+      <button type="button" id="btn-play" aria-label="Pause">❚❚</button>
+      <button type="button" id="btn-back" aria-label="Reculer de 5 secondes">−5 s</button>
+      <button type="button" id="btn-fwd" aria-label="Avancer de 5 secondes">+5 s</button>
+      <span class="tc" id="tc" aria-live="off">TC 00:00:00:00</span>
+      <label class="scrub" for="scrub"><span hidden>Position</span><input type="range" id="scrub" min="0" max="1000" value="0" step="1"></label>
+      <button type="button" id="btn-full" aria-label="Plein écran">⛶</button>
+    </div>
+    <div class="edl">
+      <p class="edl-cap">Liste de montage · clique un plan pour y aller</p>
+      <div class="edl-head" aria-hidden="true"><span>N°</span><span>Plan</span><span>TC in</span><span>TC out</span></div>
+      <ol id="edl-body"></ol>
+    </div>
+  </div>
+
+  <div class="layout">
+    <nav class="toc" aria-label="Sommaire">
+      <p class="toc-title">Sommaire</p>
+      <ol id="toc-list"></ol>
+    </nav>
+    <main id="content">
+{{SECTIONS}}
+      <footer class="end">
+{{FOOTER}}
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function () {
+  var CH = {{CHAPTERS_JSON}};
+  var FPS = CH.fps, TOTAL = CH.total;
+  var svg = document.getElementById('studio-video');
+  var btn = document.getElementById('btn-play');
+  var tcEl = document.getElementById('tc');
+  var scrub = document.getElementById('scrub');
+  var body = document.getElementById('edl-body');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var playing = false;
+  var bigPlay = document.getElementById('big-play');
+  function started() { if (bigPlay) { bigPlay.hidden = true; bigPlay = null; } }
+  var dragging = false;
+
+  function tc(s) {
+    var f = Math.round(s * FPS), ff = f % FPS, t = Math.floor(f / FPS);
+    function p(n) { return String(n).padStart(2, '0'); }
+    return p(Math.floor(t / 3600)) + ':' + p(Math.floor(t / 60) % 60) + ':' + p(t % 60) + ':' + p(ff);
+  }
+  function now() { return svg ? svg.getCurrentTime() % TOTAL : 0; }
+  function seek(t) {
+    if (!svg) return;
+    t = Math.max(0, Math.min(TOTAL - 0.04, t));
+    svg.setCurrentTime(t);
+    render();
+  }
+  function setPlaying(p) {
+    playing = p;
+    if (!svg) return;
+    if (p) svg.unpauseAnimations(); else svg.pauseAnimations();
+    btn.textContent = p ? '❚❚' : '▶';
+    btn.setAttribute('aria-label', p ? 'Pause' : 'Lecture');
+  }
+
+  // liste de montage
+  var rows = [];
+  CH.chapters.forEach(function (c, i) {
+    var li = document.createElement('li');
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.innerHTML = '<span class="cut">' + String(i).padStart(3, '0') + '</span>' +
+      '<span class="ttl"><i class="sw" style="background:' + c.color + '"></i>' + c.title + '</span>' +
+      '<span>' + tc(c.start) + '</span><span class="cut">' + tc(c.start + c.dur) + '</span>';
+    b.addEventListener('click', function () { started(); seek(c.start + 0.05); setPlaying(true); });
+    li.appendChild(b); body.appendChild(li); rows.push(b);
+  });
+
+  // boutons « voir le plan » des sections
+  Array.prototype.forEach.call(document.querySelectorAll('[data-seek]'), function (el) {
+    var c = CH.chapters.filter(function (x) { return x.key === el.getAttribute('data-seek'); })[0];
+    if (!c) { el.hidden = true; return; }
+    el.textContent = '▶ voir le plan · ' + tc(c.start).slice(3, 8);
+    el.addEventListener('click', function () {
+      started(); seek(c.start + 0.05); setPlaying(true);
+      document.getElementById('player').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    });
+  });
+
+  function render() {
+    var t = now();
+    tcEl.textContent = 'TC ' + tc(t) + ' / ' + tc(TOTAL).slice(3, 8);
+    if (!dragging) scrub.value = Math.round(t / TOTAL * 1000);
+    var cur = 0;
+    CH.chapters.forEach(function (c, i) { if (t >= c.start) cur = i; });
+    rows.forEach(function (r, i) { r.setAttribute('aria-current', i === cur ? 'true' : 'false'); });
+  }
+  function loop() { render(); requestAnimationFrame(loop); }
+
+  btn.addEventListener('click', function () { started(); setPlaying(!playing); });
+  if (bigPlay) bigPlay.addEventListener('click', function () { started(); seek(0); setPlaying(true); });
+  document.getElementById('btn-back').addEventListener('click', function () { seek(now() - 5); });
+  document.getElementById('btn-fwd').addEventListener('click', function () { seek(now() + 5); });
+  scrub.addEventListener('input', function () { started(); dragging = true; seek(scrub.value / 1000 * TOTAL); });
+  scrub.addEventListener('change', function () { dragging = false; });
+  document.getElementById('btn-full').addEventListener('click', function () {
+    var st = document.getElementById('stage');
+    if (document.fullscreenElement) { document.exitFullscreen().catch(function () {}); return; }
+    if (st.requestFullscreen) st.requestFullscreen().catch(function () {});
+  });
+  document.getElementById('player').addEventListener('keydown', function (e) {
+    if (e.target.tagName === 'INPUT') return;
+    if (e.key === ' ' || e.key === 'k') { e.preventDefault(); started(); setPlaying(!playing); }
+    if (e.key === 'ArrowLeft') seek(now() - 5);
+    if (e.key === 'ArrowRight') seek(now() + 5);
+  });
+
+  if (svg) {
+    // la page s'ouvre sur le plan titre, à l'arrêt : lisible dès le premier écran
+    var title = CH.chapters[1] ? CH.chapters[1].start + 7 : 0;
+    svg.pauseAnimations();
+    svg.setCurrentTime(title);
+    setPlaying(false);
+    loop();
+  } else if (bigPlay) { bigPlay.hidden = true; }
+
+  // sommaire construit depuis les sections
+  var toc = document.getElementById('toc-list');
+  Array.prototype.forEach.call(document.querySelectorAll('section.chap'), function (s, i) {
+    var li = document.createElement('li');
+    var a = document.createElement('a');
+    a.href = '#' + s.id;
+    a.innerHTML = '<span class="n">' + String(i + 1).padStart(2, '0') + '</span><span>' + (s.getAttribute('data-short') || s.querySelector('h2').textContent) + '</span>';
+    li.appendChild(a); toc.appendChild(li);
+  });
+
+  // boutons copier
+  Array.prototype.forEach.call(document.querySelectorAll('.code'), function (box) {
+    var pre = box.querySelector('pre');
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'copy'; b.textContent = 'Copier';
+    b.addEventListener('click', function () {
+      var txt = pre.innerText;
+      var done = function () { b.textContent = 'Copié'; setTimeout(function () { b.textContent = 'Copier'; }, 1600); };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt).then(done, function () { select(pre); b.textContent = 'Sélectionné : Ctrl+C'; });
+      } else { select(pre); b.textContent = 'Sélectionné : Ctrl+C'; }
+    });
+    box.appendChild(b);
+  });
+  function select(el) {
+    var r = document.createRange(); r.selectNodeContents(el);
+    var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+  }
+})();
+</script>

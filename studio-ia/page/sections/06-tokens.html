@@ -1,0 +1,26 @@
+      <section class="chap" id="tokens" data-short="Tokens">
+        <header>
+          <span class="plan"><i style="background:var(--s-blue)"></i>Plan 07</span>
+          <button type="button" class="seek" data-seek="tokens"></button>
+          <h2>Tokens : la méthode qui change la facture</h2>
+        </header>
+        <p class="intro">Aucune de ces habitudes ne dégrade la qualité ; la plupart l'améliorent, parce qu'un contexte court et propre donne des réponses plus justes. Elles sont classées de la plus rentable à la plus fine.</p>
+
+        <ol class="steps">
+          <li><div><strong>Une tâche, une session.</strong> <code>/clear</code> entre deux sujets sans rapport : repartir de zéro ne coûte rien, traîner l'historique d'une autre tâche coûte à chaque message. Avant, fais écrire l'état du travail dans un fichier (<code>docs/etat.md</code>) pour pouvoir reprendre.</div></li>
+          <li><div><strong>Compacter toi-même, avec une consigne.</strong> <code>/compact garde les décisions, les fichiers modifiés et les prompts validés</code> à une pause naturelle, plutôt que d'attendre la compaction automatique en pleine action.</div></li>
+          <li><div><strong>Mesurer avant d'optimiser.</strong> <code>/context</code> montre ce qui remplit la fenêtre ; <code>/usage</code> montre ce que la session a coûté. Une barre d'état qui affiche le pourcentage de contexte évite les surprises.</div></li>
+          <li><div><strong>Un CLAUDE.md court.</strong> Moins de 200 lignes, sans ce que Claude peut deviner en lisant le dossier. Le conditionnel va dans <code>rules/</code> (avec <code>paths:</code>) et les méthodes longues dans des skills.</div></li>
+          <li><div><strong>CLI d'abord, skill ensuite, MCP en dernier.</strong> Une commande appelée en Bash ne coûte rien tant qu'elle ne sert pas. Un skill coûte une ligne. Un serveur MCP ajoute ses outils à chaque session où il est branché : garde-le dans le projet qui s'en sert.</div></li>
+          <li><div><strong>Déléguer le bruit à un sous-agent.</strong> Lire 40 fichiers, analyser un log, fouiller un dépôt : un sous-agent le fait dans son propre contexte et ne renvoie que le résumé. Pour les tâches mécaniques, donne-lui un modèle plus léger (<code>model: haiku</code> dans sa définition). Attention : un sous-agent consomme ses propres tokens ; c'est rentable pour isoler du volume, pas pour une question simple.</div></li>
+          <li><div><strong>Modèle et effort fixés au départ.</strong> Changer de modèle en cours de route fait repartir le cache. Un effort de réflexion bas ou moyen suffit pour appliquer une méthode connue ; garde l'effort élevé pour les vrais problèmes.</div></li>
+          <li><div><strong>Le plan avant l'exécution.</strong> <kbd>Shift</kbd>+<kbd>Tab</kbd> jusqu'au mode plan : Claude explore et propose sans rien modifier. Tu corriges le plan (écrit dans un fichier), puis il exécute. Refaire un travail parti dans la mauvaise direction coûte bien plus cher.</div></li>
+          <li><div><strong>Filtrer les sorties bavardes.</strong> Une commande qui crache 5 000 lignes les met toutes dans le contexte. Demande des sorties courtes (<code>--quiet</code>, <code>| tail -20</code>, <code>--json | jq</code>), ou installe un filtre automatique (voir le pack plus bas).</div></li>
+          <li><div><strong>Des images à la bonne taille.</strong> Une image coûte environ <em>(largeur ÷ 28) × (hauteur ÷ 28)</em> tokens : une référence en 1000 × 1000 pèse déjà ~1 300 tokens. Réduis les captures et les planches avant de les donner à Claude ; garde la haute définition pour Higgsfield.</div></li>
+        </ol>
+
+        <div class="callout info">
+          <strong>Le bon ordre de grandeur</strong>
+          Sur une session qui dure, le poste principal n'est presque jamais CLAUDE.md : c'est l'historique et les sorties d'outils. <code>/clear</code>, <code>/compact</code> et les sous-agents pèsent plus que toutes les autres astuces réunies.
+        </div>
+      </section>

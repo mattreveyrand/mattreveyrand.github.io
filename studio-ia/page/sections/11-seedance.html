@@ -1,0 +1,100 @@
+      <section class="chap" id="seedance" data-short="Seedance 2.5 et prompts">
+        <header>
+          <span class="plan"><i style="background:var(--s-yellow)"></i>Plan 11</span>
+          <button type="button" class="seek" data-seek="seedance"></button>
+          <h2>Seedance 2.5 : réglages, prix, prompts</h2>
+        </header>
+        <p class="intro">Seedance 2.5 (Bytedance) est le modèle vidéo général par défaut du connecteur Higgsfield depuis son arrivée le 7 août 2026. Identifiant : <code>seedance_2_5</code>. Réglages relevés sur le connecteur le 28 septembre 2026.</p>
+
+        <div class="tbl">
+          <table>
+            <thead><tr><th scope="col">Paramètre</th><th scope="col">Valeurs</th><th scope="col">À savoir</th></tr></thead>
+            <tbody>
+              <tr><td><code>mode</code></td><td><code>t2v</code> · <code>omni_reference</code> · <code>video_edit</code> · <code>video_extension</code></td><td><code>t2v</code> refuse toute référence ; <code>start_image</code> et <code>end_image</code> ne marchent qu'en <code>omni_reference</code>.</td></tr>
+              <tr><td><code>duration</code></td><td>4 à 30 s (défaut 5)</td><td>Ignorée en <code>video_edit</code> : facturé sur la durée de la vidéo source.</td></tr>
+              <tr><td><code>resolution</code></td><td>480p · 720p · 1080p</td><td>Pas de 4K : pour la 4K, <code>seedance_2_0</code> en mode <code>std</code> (15 s max).</td></tr>
+              <tr><td><code>aspect_ratio</code></td><td>auto · 21:9 · 16:9 · 4:3 · 1:1 · 3:4 · 9:16</td><td>Ignoré en retouche et prolongation : la sortie suit la source.</td></tr>
+              <tr><td><code>generate_audio</code></td><td>oui (défaut) / non</td><td>Couper le son ne baisse pas le prix : autant le garder.</td></tr>
+              <tr><td><code>extension_mode</code></td><td><code>forward</code> · <code>backward</code></td><td>Obligatoire en <code>video_extension</code>, interdit ailleurs.</td></tr>
+              <tr><td><code>medias</code> (rôles)</td><td><code>start_image</code>, <code>end_image</code>, <code>image_references</code>, <code>video_references</code>, <code>audio_references</code></td><td>Jusqu'à 50 références ; c'est un plafond, pas un objectif.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Combien ça coûte</h3>
+        <div class="tbl">
+          <table>
+            <thead><tr><th scope="col">Seedance 2.5, texte seul</th><th scope="col">480p</th><th scope="col">720p</th><th scope="col">1080p</th></tr></thead>
+            <tbody>
+              <tr><td>Clip de 8 s</td><td class="num">24 crédits</td><td class="num">56 crédits</td><td class="num">96 crédits</td></tr>
+              <tr><td>Par seconde, environ</td><td class="num">3</td><td class="num">7</td><td class="num">12</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Devis réels du connecteur (<code>get_cost</code>) le 28 septembre 2026 ; un clip de 30 s en 720p coûte 210 crédits. Un brouillon en 480p coûte donc quatre fois moins qu'un final en 1080p. Les chiffres des articles de blog sont souvent périmés : demande toujours le devis.</p>
+
+        <h3>La structure d'un prompt qui marche</h3>
+        <p>L'ordre officiel des blocs est : <strong>sujet + action + décor + style + caméra + son</strong>. Seuls le sujet et l'action sont obligatoires ; les 20 à 30 premiers mots pèsent le plus. Pour plusieurs plans, Higgsfield recommande une règle visuelle en tête, le découpage plan par plan au milieu, une règle sonore à la fin. Les personnages peuvent rester courts quand les références font le travail.</p>
+        <div class="code"><span class="label">Gabarit Seedance 2.5 · omni_reference</span><pre>GLOBAL STYLE: 35mm film look, soft natural contrast, warm dusk palette.
+
+CHARACTERS:
+@Image1 defines Lena's face, hairstyle and clothing.
+@Image2 defines the harbor location and its light. Do not use the people in this image.
+
+SHOT 1 (0-4s) — wide, slow dolly-in: Lena walks along the wet pier toward camera,
+coat moving in the wind. Ends with her stopping at the railing.
+SHOT 2 (4-8s) — medium close-up, locked camera: she turns her head to the sea,
+a strand of hair crosses her face. Ends on her calm profile.
+
+AUDIO: (low ambient strings) &lt;waves against the pier, distant gulls&gt;. No dialogue.</pre></div>
+        <ul>
+          <li><strong>Une ligne par sujet</strong>, avec ce qu'il faut prendre et ce qu'il faut ignorer (« Do not use the people in this image »). Jamais « @Images 1 to 4 define four characters ».</li>
+          <li><strong>Une planche personnage</strong> laisse fuir son fond gris : ajouter « Do not take the gray backdrop, the panel borders, or the multi-view layout ».</li>
+          <li><strong>Chaque plan finit sur un état visible</strong> (« Ends with… ») : c'est ce qui rend les enchaînements et les prolongations propres.</li>
+          <li><strong>Son</strong> : <code>( )</code> musique, <code>&lt; &gt;</code> bruitages, <code>{ }</code> dialogue. Pour se passer de musique, écrire « No music. » en texte simple, jamais entre parenthèses (ce serait lu comme une consigne musicale).</li>
+          <li><strong>Dialogue en français</strong> : le chinois est la langue par défaut. Ajouter une ligne <code>Dialogue language: natural Parisian French.</code> puis <code>She says: {…}</code>. Le reste du prompt reste en anglais. Pour du français parlé, Seedance 2.5 plutôt que Kling 3.0, dont l'audio natif ne liste pas le français.</li>
+          <li><strong>Pas de texte entre guillemets dans les actions</strong> : il serait prononcé.</li>
+          <li><strong>Action physique et gros plan d'acteur</strong> dans des générations séparées, assemblées ensuite.</li>
+          <li><strong>Prompt en anglais</strong>, moins de 200 mots environ ; <strong>un seul mouvement de caméra par plan</strong> (empiler travelling, panoramique et bascule est la première cause de tremblement).</li>
+        </ul>
+        <p class="sources">Syntaxe des références et des crochets : doctrine Seedance reprise par le skill communautaire OSideMedia ; à vérifier sur tes propres brouillons en 480p.</p>
+
+        <details class="more">
+          <summary>Deux exemples complets : pub produit et UGC en français</summary>
+          <div>
+            <div class="code"><span class="label">omni_reference · 10 s · 9:16</span><pre>@Image1 defines the perfume bottle only: keep its exact shape, glass color, cap and label;
+do not copy its white studio background.
+0-3s: the bottle rests on wet black stone, a single drop slides down the glass, macro
+close-up, slow push in.
+3-7s: smooth 180-degree orbit at eye level, constant distance, warm backlight glows through
+the liquid, light haze.
+7-10s: locked-off hero shot, a soft light sweep crosses the label.
+High-end commercial look, deep blacks, gold highlights, tack-sharp.
+(slow deep ambient synth pad) &lt;a crystalline chime as the light sweeps&gt;</pre></div>
+            <div class="code"><span class="label">omni_reference · 10 s · 9:16 · dialogue en français</span><pre>UGC creator selfie video on a phone front camera, handheld with slight natural shake, soft
+window daylight, real lived-in bedroom. A woman with curly auburn hair holds the serum
+bottle from @Image1 next to her cheek, looks into the lens, natural blinks, small smile a
+half-beat late.
+Dialogue language: natural Parisian French, relaxed conversational delivery.
+She says: {Franchement, je pensais pas que ça marcherait aussi vite.}
+She taps the bottle twice. She says: {Trois jours, et regarde ma peau.}
+Audio: clear voice, quiet room tone, faint street noise. No music.</pre></div>
+            <p>Six autres exemples (cinéma, action en plusieurs plans, anime, image de départ, prolongation, POV) et le vocabulaire de caméra complet sont dans le skill <code>seedance-2-5</code>.</p>
+          </div>
+        </details>
+
+        <h3>Prolonger et retoucher</h3>
+        <div class="code"><span class="label">video_extension · devis</span><pre>{
+  "params": {
+    "model": "seedance_2_5",
+    "mode": "video_extension",
+    "extension_mode": "forward",
+    "prompt": "The first frame of the extended segment directly continues from the last frame of @Video1: the same woman keeps walking toward the window, same lens, same light, the camera keeps its slow dolly-left.",
+    "duration": 8,
+    "resolution": "720p",
+    "medias": [ { "role": "video_references", "value": "&lt;media_id ou job_id du plan à prolonger&gt;" } ],
+    "get_cost": true
+  }
+}</pre></div>
+        <p>Pour une retouche (<code>video_edit</code>), reprendre le gabarit officiel « TASK - VIDEO EDIT » : il commence par préserver les textes à l'écran, découpe le clip en segments de temps sans trou, et utilise un seul verbe par segment (« Replace only… », « Modify only… », « Remove only… », « Add only… ») suivi de « Keep every unrequested element, camera motion, lighting treatment, and overall color grading from @Video1 exactly the same. »</p>
+      </section>

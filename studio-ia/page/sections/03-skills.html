@@ -1,0 +1,68 @@
+      <section class="chap" id="skills" data-short="Skills">
+        <header>
+          <span class="plan"><i style="background:var(--s-magenta)"></i>Plan 04</span>
+          <button type="button" class="seek" data-seek="skills"></button>
+          <h2>Skills : le savoir-faire rangé en tiroirs</h2>
+        </header>
+        <p class="intro">Un skill est un dossier qui contient un fichier <code>SKILL.md</code> : un nom, une description, puis la méthode. Claude ne voit au départ que le nom et la description. Il lit la méthode quand ta demande correspond, et n'ouvre les fichiers annexes que s'il en a besoin. Cent skills bien décrits coûtent donc peu ; un seul skill mal découpé peut coûter cher à chaque appel.</p>
+
+        <div class="grid">
+          <div class="panel m">
+            <span class="tag">Niveau 1 · toujours chargé</span>
+            <h4>Nom + description</h4>
+            <p>Quelques dizaines de tokens par skill. C'est ce texte qui décide si le skill se déclenche.</p>
+          </div>
+          <div class="panel b">
+            <span class="tag">Niveau 2 · à la demande</span>
+            <h4>Le corps de SKILL.md</h4>
+            <p>Lu en entier quand le skill se déclenche. Viser moins de 500 lignes ; au-delà, découper.</p>
+          </div>
+          <div class="panel c">
+            <span class="tag">Niveau 3 · si nécessaire</span>
+            <h4>references/, scripts/, assets/</h4>
+            <p>Docs longues lues au besoin ; scripts exécutés dont seule la sortie entre dans le contexte.</p>
+          </div>
+        </div>
+
+        <h3>Le gabarit</h3>
+        <div class="code"><span class="label">~/.claude/skills/mon-skill/SKILL.md</span><pre>---
+name: mon-skill
+description: >
+  Ce que fait le skill, en une phrase. À utiliser quand l'utilisateur
+  dit « … », « … » ou quand [situation]. Pas pour : [cas voisin → autre skill].
+---
+
+# Titre
+
+## Méthode
+1. …
+2. …
+
+## Pièges
+- …
+
+## Pour aller plus loin
+- Détail des paramètres : references/parametres.md (lire seulement si besoin)</pre></div>
+
+        <h3>Écrire une description qui se déclenche</h3>
+        <ul>
+          <li>Commence par ce que le skill produit, puis liste les phrases que tu dirais vraiment (« fais danser mon perso », « remplace le produit dans la vidéo »).</li>
+          <li>Ajoute une ligne « Pas pour » qui renvoie vers le skill voisin : c'est ce qui évite les faux déclenchements.</li>
+          <li>Pas de titre vague (« Aide vidéo ») : Claude choisit sur la description, pas sur le nom.</li>
+          <li>Tu peux toujours forcer un skill en tapant <code>/nom-du-skill</code>.</li>
+        </ul>
+
+        <h3>Où les mettre</h3>
+        <div class="tbl">
+          <table>
+            <thead><tr><th scope="col">Surface</th><th scope="col">Emplacement</th><th scope="col">Portée</th></tr></thead>
+            <tbody>
+              <tr><td>Claude Code, personnel</td><td><code>~/.claude/skills/&lt;nom&gt;/SKILL.md</code></td><td>Tous tes projets</td></tr>
+              <tr><td>Claude Code, projet</td><td><code>.claude/skills/&lt;nom&gt;/SKILL.md</code></td><td>Ce dépôt (partagé via Git)</td></tr>
+              <tr><td>Claude Code, plugin</td><td><code>/plugin install &lt;nom&gt;@&lt;marketplace&gt;</code></td><td>Selon l'activation du plugin</td></tr>
+              <tr><td>claude.ai et Cowork</td><td>Réglages → Personnaliser (<em>Customize</em>) → Skills : importer un .zip du dossier</td><td>Ton compte (l'exécution de code doit être active)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Les skills officiels d'Anthropic (Word, Excel, PowerPoint, PDF, <code>skill-creator</code>…) sont publiés sur <a href="https://github.com/anthropics/skills">github.com/anthropics/skills</a>. <code>skill-creator</code> sert à écrire, tester et améliorer tes propres skills : demande-lui de transformer une méthode qui marche en skill.</p>
+      </section>

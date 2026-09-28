@@ -1,0 +1,62 @@
+      <section class="chap" id="architecture" data-short="Architecture">
+        <header>
+          <span class="plan"><i style="background:var(--s-cyan)"></i>Plan 06</span>
+          <button type="button" class="seek" data-seek="architecture"></button>
+          <h2>L'architecture : global, projet, règles</h2>
+        </header>
+        <p class="intro">Chaque fichier de configuration a une portée. Ce qui est global se paie dans toutes les sessions de tous les projets ; ce qui est dans un projet ne se paie que là ; une règle avec <code>paths:</code> ne se charge que quand Claude touche des fichiers qui correspondent.</p>
+
+        <div class="grid">
+          <div class="code"><span class="label">Global · toi, partout</span><pre>~/.claude/
+├─ CLAUDE.md          qui tu es, langue, règles dures (court)
+├─ settings.json      permissions, hooks, plugins, modèle
+├─ rules/*.md         avec paths: → chargées si ça matche
+├─ skills/            savoir-faire réutilisable
+├─ agents/            sous-agents (listés dans chaque session)
+├─ hooks/             scripts des garde-fous
+└─ projects/…/memory/ mémoire auto, par projet</pre></div>
+          <div class="code"><span class="label">Projet · ce que tu fabriques</span><pre>ma-serie/
+├─ CLAUDE.md          but, format, commandes, pièges
+├─ CLAUDE.local.md    notes perso, non versionnées
+├─ .claude/
+│  ├─ settings.json   réglages partagés du projet
+│  ├─ skills/         skills propres au projet
+│  ├─ agents/         agents propres au projet
+│  └─ rules/          règles par type de fichier
+├─ .mcp.json          MCP de ce projet seulement
+└─ docs/ decisions/   plans et décisions écrits</pre></div>
+        </div>
+
+        <h3>Un projet vidéo type</h3>
+        <div class="code"><pre>chaine-faceless/
+├─ CLAUDE.md          objectif, format, ton, règles de la chaîne
+├─ .mcp.json          Higgsfield branché ici, pas en global
+├─ .claude/settings.json
+├─ brief/             une fiche par épisode : brief.md
+├─ refs/              planches perso, décors, objets (images légères)
+├─ prompts/           prompts validés, un fichier par plan
+├─ decisions/         ce qui a été tranché, daté
+└─ renders/           sorties lourdes : ignorées par Git et par Claude</pre></div>
+
+        <div class="code"><span class="label">.claude/settings.json · Claude ne lit pas les rendus lourds</span><pre>{
+  "permissions": {
+    "deny": [
+      "Read(./renders/**)",
+      "Read(./**/*.mp4)",
+      "Read(./**/*.mov)",
+      "Read(./.env)"
+    ]
+  }
+}</pre></div>
+
+        <h3>Les règles de portée</h3>
+        <ul>
+          <li><strong>CLAUDE.md global</strong> : moins de 100 lignes. Identité, langue, règles dures (argent, publication, secrets), routage des outils.</li>
+          <li><strong>CLAUDE.md de projet</strong> : moins de 200 lignes. Ce que Claude ne peut pas deviner en lisant le dossier.</li>
+          <li><strong>rules/ avec <code>paths:</code></strong> : tout ce qui ne concerne qu'un type de fichier (vidéo, web, trading…).</li>
+          <li><strong>Skills</strong> : les méthodes longues (plus de 50 lignes) qui ne servent pas à chaque message.</li>
+          <li><strong>Sous-agents</strong> : chaque fichier de <code>~/.claude/agents/</code> est listé dans toutes les sessions. Garde en global ceux qui servent partout ; range les autres dans le projet.</li>
+          <li><strong>MCP</strong> : dans le <code>.mcp.json</code> du projet qui s'en sert. Un MCP ne se branche pas à chaud : redémarre la session après l'avoir ajouté.</li>
+          <li><strong>Secrets</strong> : jamais dans un fichier versionné. Variables d'environnement, et <code>Read(./.env)</code> en <code>deny</code>.</li>
+        </ul>
+      </section>

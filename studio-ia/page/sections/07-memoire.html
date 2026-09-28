@@ -1,0 +1,38 @@
+      <section class="chap" id="memoire" data-short="Mémoire">
+        <header>
+          <span class="plan"><i style="background:var(--s-yellow)"></i>Plan 08</span>
+          <button type="button" class="seek" data-seek="memoire"></button>
+          <h2>La mémoire : trois couches, un seul principe</h2>
+        </header>
+        <p class="intro">Ce qui n'est pas écrit dans un fichier est perdu à la fin de la session. Le principe : écrire la décision, pas la conversation. Un fait par fichier, daté, court, facile à retrouver.</p>
+
+        <div class="grid">
+          <div class="panel y">
+            <span class="tag">toujours lu</span>
+            <h4>CLAUDE.md</h4>
+            <p>Ce qui doit s'appliquer à chaque message : identité, langue, règles dures, routage des outils. Tu l'écris ; il change rarement.</p>
+          </div>
+          <div class="panel m">
+            <span class="tag">noté par Claude</span>
+            <h4>Mémoire auto</h4>
+            <p>Claude Code garde lui-même ses apprentissages par projet (un index <code>MEMORY.md</code> et des fiches thématiques). Le début de l'index est chargé à chaque session. Relis-le et nettoie-le avec <code>/memory</code>.</p>
+          </div>
+          <div class="panel c">
+            <span class="tag">lu à la demande</span>
+            <h4>Second cerveau</h4>
+            <p>Un dossier Markdown (décisions, résultats, références) interrogé par une recherche locale (<code>qmd</code>, <code>rg</code>). Rien n'est chargé tant que Claude ne cherche pas.</p>
+          </div>
+        </div>
+
+        <h3>Côté claude.ai</h3>
+        <ul>
+          <li><strong>Mémoire</strong> : Réglages → Mémoire pour voir, corriger ou effacer ce que Claude retient ; le mode incognito ne mémorise rien.</li>
+          <li><strong>Projets</strong> : les consignes et fichiers d'un chantier. Préférer quelques documents courts et denses à un gros PDF.</li>
+          <li><strong>Recherche dans les conversations</strong> : Claude peut retrouver une discussion passée si tu lui demandes.</li>
+        </ul>
+
+        <h3>La routine de fin de session</h3>
+        <div class="code"><span class="label">À dire à Claude avant /clear</span><pre>Écris dans decisions/AAAA-MM-JJ-sujet.md ce qu'on a décidé, ce qui a marché,
+ce qui a échoué et pourquoi, et la prochaine étape. Dix lignes maximum.</pre></div>
+        <p>La session suivante commence par : « lis <code>decisions/</code> du plus récent au plus ancien et reprends ». Tu paies dix lignes au lieu de tout l'historique.</p>
+      </section>

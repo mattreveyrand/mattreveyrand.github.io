@@ -1,0 +1,57 @@
+      <section class="chap" id="contexte" data-short="Contexte et cache">
+        <header>
+          <span class="plan"><i style="background:var(--s-blue)"></i>Plan 03</span>
+          <button type="button" class="seek" data-seek="contexte"></button>
+          <h2>Le contexte, le cache, et pourquoi ça coûte</h2>
+        </header>
+        <p class="intro">Claude ne se souvient de rien entre deux messages : à chaque tour, il relit tout ce qui est dans sa fenêtre de contexte. Plus la fenêtre est pleine, plus chaque message coûte cher, et plus la qualité baisse sur les longues sessions. Presque toutes les économies viennent de là.</p>
+
+        <h3>Ce qui est chargé avant même que tu écrives</h3>
+        <div class="tbl">
+          <table>
+            <thead><tr><th scope="col">Couche</th><th scope="col">Chargé</th><th scope="col">Comment la réduire</th></tr></thead>
+            <tbody>
+              <tr><td>Prompt système et outils intégrés</td><td>toujours</td><td>Rien à faire.</td></tr>
+              <tr><td>CLAUDE.md (utilisateur, projet, local)</td><td>toujours, au démarrage</td><td>Court (moins de 200 lignes). Le conditionnel va dans <code>rules/</code> avec <code>paths:</code>, ou dans un skill.</td></tr>
+              <tr><td>Mémoire auto (index <code>MEMORY.md</code>)</td><td>début du fichier, à chaque session</td><td>Relire et élaguer avec <code>/memory</code>.</td></tr>
+              <tr><td>Skills, commandes, sous-agents</td><td>nom + description seulement</td><td>Descriptions courtes et précises ; désactiver ce qui ne sert jamais.</td></tr>
+              <tr><td>Serveurs MCP</td><td>noms d'outils ; schémas chargés à la demande (recherche d'outils)</td><td>Un MCP par projet (<code>.mcp.json</code>), pas tous en global.</td></tr>
+              <tr><td>Conversation, fichiers lus, sorties de commandes</td><td>grandit à chaque tour</td><td><code>/clear</code>, <code>/compact</code>, sous-agents, sorties filtrées.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Le cache de prompt</h3>
+        <p>Quand le début du contexte est identique d'un tour à l'autre, il est lu depuis le cache, au moins dix fois moins cher que le prix normal. C'est automatique. Le cache dure une heure sur un abonnement Pro ou Max, cinq minutes quand on consomme des crédits d'usage (réglable avec <code>promptCacheTtl</code>). Ce qui le fait repartir de zéro : changer de modèle en cours de session, brancher ou débrancher un serveur MCP ou un plugin, compacter, et laisser la session inactive plus longtemps que sa durée.</p>
+        <p>Conséquence pratique : choisis le modèle et l'effort (<code>low</code>, <code>medium</code>, <code>high</code>, <code>xhigh</code>, <code>max</code>) au début de la session et n'y touche plus. Si tu as besoin d'un autre modèle pour une sous-tâche, confie-la à un sous-agent.</p>
+        <p>La fenêtre des modèles actuels (Opus 5.5, Sonnet 5, Fable 5.1, Haiku 4.5) fait un million de tokens. Ce n'est pas une raison pour la remplir : plus elle est pleine, plus chaque message coûte, et la précision baisse sur les très longues sessions.</p>
+
+        <h3>Quel modèle, quand</h3>
+        <div class="tbl">
+          <table>
+            <thead><tr><th scope="col">Modèle</th><th scope="col">Pour</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Opus 5.5</strong></td><td>Le défaut recommandé par Anthropic depuis sa sortie le 22 septembre 2026 : direction créative, plans, code. Moins cher et plus rapide qu'Opus 5.</td></tr>
+              <tr><td><strong>Sonnet 5</strong></td><td>Travail en volume et vérifiable : résumés, tri, variantes de prompts.</td></tr>
+              <tr><td><strong>Haiku 4.5</strong></td><td>Sous-agents mécaniques : lire des logs, renommer, extraire.</td></tr>
+              <tr><td><strong>Fable 5.1</strong></td><td>Les problèmes de raisonnement les plus durs, quand Opus 5.5 bloque.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Les commandes à connaître</h3>
+        <div class="tbl">
+          <table>
+            <thead><tr><th scope="col">Commande</th><th scope="col">Effet</th><th scope="col">Quand</th></tr></thead>
+            <tbody>
+              <tr><td><code>/context</code></td><td>Montre ce qui remplit la fenêtre, couche par couche.</td><td>Dès qu'une session paraît lente ou chère.</td></tr>
+              <tr><td><code>/usage</code></td><td>Consommation de l'abonnement et coût estimé de la session.</td><td>Après chaque phase de travail.</td></tr>
+              <tr><td><code>/clear</code></td><td>Repart d'une conversation vide (CLAUDE.md rechargé).</td><td>Entre deux tâches sans rapport.</td></tr>
+              <tr><td><code>/compact garde X</code></td><td>Résume la conversation en gardant ce que tu nommes.</td><td>À une pause naturelle d'une même tâche.</td></tr>
+              <tr><td><code>/rewind</code> ou <kbd>Esc</kbd> <kbd>Esc</kbd></td><td>Revient à un point précédent (code et conversation).</td><td>Quand une piste part dans le mur.</td></tr>
+              <tr><td><code>/resume</code></td><td>Reprend une session précédente.</td><td>Pour continuer un chantier le lendemain.</td></tr>
+              <tr><td><code>/model</code>, <code>/effort</code></td><td>Change le modèle ou l'effort de réflexion.</td><td>Au début seulement (sinon le cache repart).</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>

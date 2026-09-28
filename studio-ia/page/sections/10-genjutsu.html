@@ -1,0 +1,73 @@
+      <section class="chap" id="genjutsu" data-short="Genjutsu">
+        <header>
+          <span class="plan"><i style="background:var(--s-red)"></i>Plan 10</span>
+          <button type="button" class="seek" data-seek="genjutsu"></button>
+          <h2>Genjutsu : la fiche pour ne plus rater</h2>
+        </header>
+        <p class="intro">« Genjutsu » n'est pas un nom de modèle. C'est une famille de deux modèles vidéo de Higgsfield, qu'on choisit selon ce qu'on veut faire. Tout ce qui suit a été relevé directement sur le connecteur Higgsfield le 28 septembre 2026.</p>
+
+        <div class="grid">
+          <div class="panel r">
+            <span class="tag">copier un mouvement</span>
+            <h4><code>hf_mult_motion_control</code></h4>
+            <p>Ton personnage (sur une photo) reproduit le mouvement d'une vidéo : danse, geste, démarche, mouvement de caméra.</p>
+            <ul>
+              <li>1 vidéo conductrice → rôle <code>video</code></li>
+              <li>1 image ou plus du personnage → rôle <code>image</code></li>
+            </ul>
+          </div>
+          <div class="panel c">
+            <span class="tag">remplacer un élément</span>
+            <h4><code>hf_mult_replace_object</code></h4>
+            <p>Dans une vidéo existante, un objet, un produit, un vêtement ou un personnage est remplacé par celui de ta photo.</p>
+            <ul>
+              <li>1 vidéo source → rôle <code>video</code></li>
+              <li>1 image ou plus du nouvel élément → rôle <code>image</code></li>
+            </ul>
+          </div>
+        </div>
+        <p>Un seul réglage : <code>resolution</code> (<code>480p</code>, <code>720p</code> par défaut, <code>1080p</code>). Pas de durée ni de format : la sortie suit la vidéo source, et le prix aussi. Les essais gratuits de Genjutsu ne sont pas disponibles par le connecteur (site web uniquement).</p>
+
+        <h3>La recette</h3>
+        <ol class="steps">
+          <li><div><strong>Préparer la vidéo.</strong> Un seul plan, sans coupe, un seul sujet bien visible, cadrage stable, 4 à 15 secondes. Découpe-la avant (ffmpeg, ou n'importe quel éditeur) : la longueur et la résolution font le prix.</div></li>
+          <li><div><strong>Préparer l'image.</strong> Même cadrage que la vidéo (plein pied si la vidéo est en plein pied), sujet net et bien éclairé, membres visibles. Pour un personnage, une planche du workflow <code>character-sheet</code> est idéale.</div></li>
+          <li><div><strong>Envoyer les fichiers.</strong> Dans l'app Claude : tape <code>/genjutsu</code> et dépose la vidéo et les photos dans le widget d'upload. Le connecteur n'accepte que des identifiants de média confirmés, jamais une URL ni un chemin de fichier.</div></li>
+          <li><div><strong>Demander le devis.</strong> <code>"get_cost": true</code> : le prix s'affiche, rien n'est lancé.</div></li>
+          <li><div><strong>Brouillon en 480p ou 720p,</strong> un seul envoi, puis attendre le résultat. Le 1080p seulement quand le mouvement est bon.</div></li>
+        </ol>
+
+        <div class="code"><span class="label">Transfert de mouvement · devis</span><pre>{
+  "params": {
+    "model": "hf_mult_motion_control",
+    "prompt": "Transfer the full-body dance, timing and camera motion of the performer in @Video1 onto the woman in @Image1. Keep her face, hair, skin tone, outfit and proportions exactly as in @Image1 in every frame. Natural anatomy, no extra people, no text, no watermark.",
+    "resolution": "720p",
+    "medias": [
+      { "role": "video", "value": "&lt;media_id de la vidéo&gt;" },
+      { "role": "image", "value": "&lt;media_id de la photo&gt;" }
+    ],
+    "get_cost": true
+  }
+}</pre></div>
+        <div class="code"><span class="label">Remplacement d'objet · prompt</span><pre>Replace only the white sneakers worn by the man in @Video1 with the shoes from @Image1,
+matching their exact shape, colors, materials and logo placement. Keep the man, his motion,
+the camera moves, cuts, lighting, background, timing and every on-screen text from @Video1
+exactly the same.</pre></div>
+        <p>Les étiquettes <code>@Video1</code>, <code>@Image1</code>… suivent l'ordre des médias envoyés ; c'est la convention des workflows Higgsfield. Nommer <em>une seule</em> cible, sans ambiguïté (couleur, position, qui la porte), et dire explicitement ce qui ne doit pas bouger.</p>
+
+        <h3>Pourquoi ça échoue</h3>
+        <div class="tbl">
+          <table>
+            <thead><tr><th scope="col">Symptôme</th><th scope="col">Cause</th><th scope="col">Correction</th></tr></thead>
+            <tbody>
+              <tr><td>Refus immédiat, modèle inconnu</td><td><code>"model": "genjutsu"</code></td><td><code>hf_mult_motion_control</code> ou <code>hf_mult_replace_object</code></td></tr>
+              <tr><td>Refus sur les médias</td><td>zéro ou deux vidéos ; image envoyée en <code>start_image</code></td><td>exactement une <code>video</code>, les images en <code>image</code></td></tr>
+              <tr><td>Refus sur la valeur</td><td>URL ou chemin au lieu d'un identifiant</td><td>widget d'upload ou <code>media_import_url</code></td></tr>
+              <tr><td>Le job tourne, mais le résultat est faux</td><td>vidéo chargée (coupes, plusieurs personnes, sujet qui sort du cadre), image de face vs vidéo de dos, prompt qui ne nomme pas la cible</td><td>recouper la vidéo, refaire la référence au même cadrage, prompt « Replace only… / Keep … exactly the same »</td></tr>
+              <tr><td>Facture plus élevée que prévu</td><td>renvois pendant qu'un job tourne, source longue en 1080p</td><td>un envoi, <code>jobs_wait</code> ; devis avant ; brouillon en 480p</td></tr>
+              <tr><td>« Essais gratuits » refusés</td><td>non disponibles via le connecteur</td><td>les utiliser sur le site Higgsfield</td></tr>
+              <tr><td>Mauvais outil</td><td>ancien outil <code>motion_control</code>, ou <code>ad-multiplier</code> pour une seule édition</td><td>Genjutsu passe par <code>generate_video</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>

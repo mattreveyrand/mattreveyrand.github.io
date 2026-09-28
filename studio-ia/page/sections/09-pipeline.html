@@ -1,0 +1,53 @@
+      <section class="chap" id="pipeline" data-short="Pipeline vidéo">
+        <header>
+          <span class="plan"><i style="background:var(--s-yellow)"></i>Plan 09</span>
+          <button type="button" class="seek" data-seek="pipeline"></button>
+          <h2>Le pipeline vidéo Higgsfield</h2>
+        </header>
+        <p class="intro">Le principe : les crédits se dépensent sur des plans déjà validés. On règle le prompt sur des brouillons courts et en basse définition, on demande le devis avant chaque rendu, et le 1080p ne sert qu'à confirmer.</p>
+
+        <ol class="steps">
+          <li><div><strong>Brief.</strong> Un plan = une intention, une action, une caméra. Écris-le dans <code>brief/plan-03.md</code> : Claude le relira au lieu de tout garder en mémoire.</div></li>
+          <li><div><strong>Références.</strong> Une planche personnage (workflow <code>character-sheet</code> : fond blanc, une seule personne, face + plein pied), le décor, l'objet. Des références propres sont le meilleur remède contre la dérive d'identité.</div></li>
+          <li><div><strong>Brouillon.</strong> Seedance 2.5 en 480p, 5 à 8 secondes, une seule variable changée par essai et environ trois prises payantes par plan. Pour régler cadrage et action encore moins cher : <code>seedance_2_0_mini</code> en 480p (~2,5 crédits les 5 s).</div></li>
+          <li><div><strong>Devis.</strong> Le même appel avec <code>"get_cost": true</code> renvoie le prix en crédits sans rien lancer. À faire avant chaque rendu, surtout en 1080p et sur les durées longues.</div></li>
+          <li><div><strong>Final.</strong> Il n'y a pas de seed : relancer en 1080p donne une <em>nouvelle</em> prise. Si la prise du brouillon te plaît, agrandis-la (<code>upscale_video</code>, Bytedance, préréglage <code>aigc</code>) ; sinon, même prompt en 1080p, un seul envoi, puis attendre (<code>jobs_wait</code>). Ne jamais renvoyer tant que le premier job n'a pas de statut : chaque envoi est facturé.</div></li>
+          <li><div><strong>Genjutsu si besoin.</strong> Transférer un mouvement ou remplacer un objet dans le plan obtenu (voir la fiche suivante).</div></li>
+          <li><div><strong>Finition.</strong> Upscale (<code>bytedance_video_upscale</code> jusqu'en 4K, <code>fps_boost</code>), sous-titres (workflow <code>subtitles</code>), assemblage et étalonnage en local (ffmpeg, HyperFrames).</div></li>
+        </ol>
+
+        <h3>Quel modèle pour quel plan</h3>
+        <p>Routage par défaut du connecteur Higgsfield, relevé le 28 septembre 2026.</p>
+        <div class="tbl">
+          <table>
+            <thead><tr><th scope="col">Besoin</th><th scope="col">Modèle</th><th scope="col">Réglages clés</th></tr></thead>
+            <tbody>
+              <tr><td>Vidéo générale, de 4 à 30 s, avec son</td><td><code>seedance_2_5</code></td><td>480p · 720p · 1080p ; 4 modes (texte, références, retouche, prolongation)</td></tr>
+              <tr><td>4K native, plans produits des recettes Higgsfield</td><td><code>seedance_2_0</code></td><td>4 à 15 s ; 4K et 1080p en mode <code>std</code></td></tr>
+              <tr><td>Multi-plans, brouillons muets moins chers</td><td><code>kling3_0</code></td><td>3 à 15 s ; <code>sound: "off"</code> coûte moins</td></tr>
+              <tr><td>Images-clés 2K, références mixtes</td><td><code>minimax_h3</code></td><td>4 à 15 s, 2K</td></tr>
+              <tr><td>Pub produit, UGC</td><td><code>marketing_studio_video</code></td><td>12 à 15 s ; avatar + produit</td></tr>
+              <tr><td>Copier un mouvement / remplacer un objet</td><td><code>hf_mult_motion_control</code> · <code>hf_mult_replace_object</code></td><td>Genjutsu ; seul réglage : la résolution</td></tr>
+              <tr><td>Image de départ, planche, décor</td><td><code>nano_banana_pro</code>, <code>gpt_image_2_5</code>, <code>soul_2</code></td><td>Nano Banana Pro : 1k à 4k ; GPT Image 2.5 : défaut image du connecteur</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>En cas de doute : <code>models_explore</code> avec <code>"action": "recommend"</code> et une phrase qui décrit le plan et ses entrées.</p>
+
+        <h3>Les workflows intégrés de Higgsfield</h3>
+        <p>Le connecteur embarque ses propres méthodes, avec des gabarits de prompts stricts. Pour une vidéo en plusieurs étapes, commence par <code>get_workflow_instructions</code> sans argument pour voir la liste, puis charge celui qui correspond :</p>
+        <div class="tbl">
+          <table>
+            <thead><tr><th scope="col">Workflow</th><th scope="col">Pour</th></tr></thead>
+            <tbody>
+              <tr><td><code>character-sheet</code></td><td>Planche personnage cohérente, à réutiliser comme référence dans Seedance et Genjutsu.</td></tr>
+              <tr><td><code>ad-multiplier</code></td><td>Plusieurs versions indépendantes d'une même vidéo de 4 à 30 s (autre personne, autre produit…).</td></tr>
+              <tr><td><code>faceless-video</code></td><td>Vidéo narrée multi-scènes : style verrouillé, une voix, sous-titres incrustés.</td></tr>
+              <tr><td><code>thumbnail-generation</code></td><td>Miniatures YouTube et couvertures, avec verrouillage d'identité.</td></tr>
+              <tr><td><code>video-editing</code></td><td>Montage de rushes et motion design dans le bac à sable Higgsfield.</td></tr>
+              <tr><td><code>subtitles</code></td><td>Sous-titres incrustés, calés sur l'audio (Whisper).</td></tr>
+              <tr><td><code>ugc-*</code>, <code>product-photoshoot</code></td><td>Vidéos UGC (avis, déballage, tutoriel, essayage), photos produit.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>

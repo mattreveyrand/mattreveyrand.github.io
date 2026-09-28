@@ -1,0 +1,122 @@
+      <section class="chap" id="pack" data-short="Le pack de skills">
+        <header>
+          <span class="plan"><i style="background:var(--s-green)"></i>Hors vidéo</span>
+          <h2>Le pack : ce qu'il faut installer, et ce qu'il faut éviter</h2>
+        </header>
+        <p class="intro">Recherche du 28 septembre 2026 : dépôts vérifiés un par un, tests indépendants quand ils existent. Les chiffres annoncés par les auteurs sont souvent 3 à 8 fois supérieurs à ce que mesurent les tests indépendants. Règle : installer un outil à la fois, et regarder <code>/usage</code> pendant une semaine avant d'ajouter le suivant.</p>
+
+        <h3>Déjà là, gratuit, à utiliser d'abord</h3>
+        <div class="tbl">
+          <table>
+            <thead><tr><th scope="col">Réglage ou commande</th><th scope="col">Ce que ça apporte</th></tr></thead>
+            <tbody>
+              <tr><td><code>/usage</code></td><td>Sur Pro et Max : part de la consommation attribuée à chaque skill, plugin, sous-agent et serveur MCP. C'est l'outil pour juger tout le reste.</td></tr>
+              <tr><td><code>/context</code>, <code>/doctor</code></td><td>Ce qui remplit la fenêtre ; coût de la liste des skills et plus gros contributeurs.</td></tr>
+              <tr><td>Mémoire auto</td><td>Active par défaut. Index <code>MEMORY.md</code> dont les 200 premières lignes (25 Ko max) sont chargées à chaque session ; fiches thématiques lues à la demande.</td></tr>
+              <tr><td>Budget de la liste des skills</td><td>Noms et descriptions de tous les skills tiennent dans environ 1 % de la fenêtre. Au-delà, des descriptions sont retirées et les skills se déclenchent mal. Pour tes skills personnels ou de projet rarement utiles : mode « nom seul » (<code>skillOverrides</code>) ou <code>disable-model-invocation: true</code> pour ceux que tu appelles toujours à la main. Les skills livrés par un plugin ne sont pas concernés : on les gère avec <code>/plugin</code> (désactiver le plugin). <code>/skill-doctor</code> liste ceux qui ne servent jamais.</td></tr>
+              <tr><td>Sous-agents sur un petit modèle</td><td><code>model: haiku</code> dans la définition d'un sous-agent qui fait du tri, de la lecture de logs, du renommage.</td></tr>
+              <tr><td><code>/effort</code></td><td>Baisse la réflexion pour les tâches de routine (elle ne se coupe pas complètement sur Opus 5.5).</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Le pack, dans l'ordre d'installation</h3>
+        <div class="tbl">
+          <table>
+            <thead><tr><th scope="col">Outil</th><th scope="col">Ce qu'il fait</th><th scope="col">Preuve</th><th scope="col">Installer</th><th scope="col">Verdict</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>claude-md-management</strong><br><span class="sources">officiel Anthropic</span></td>
+                <td>Audite ton CLAUDE.md contre le projet réel ; <code>/revise-claude-md</code> range en fin de session ce qui a été appris.</td>
+                <td>Mémoire propre sans LLM en arrière-plan.</td>
+                <td><code>/plugin install claude-md-management@claude-plugins-official</code></td>
+                <td><span class="pill must">Indispensable</span></td>
+              </tr>
+              <tr>
+                <td><strong>planning-with-files</strong><br><span class="sources">OthmanAdi</span></td>
+                <td>Plan, découvertes et progression écrits sur disque (<code>task_plan.md</code>, <code>findings.md</code>, <code>progress.md</code>) et réinjectés à chaque tour.</td>
+                <td>Rend <code>/clear</code> sans risque, et <code>/clear</code> est le levier le moins cher qui existe. Gains mesurés par l'auteur seulement.</td>
+                <td><code>/plugin marketplace add OthmanAdi/planning-with-files</code><br><code>/plugin install planning-with-files@planning-with-files</code></td>
+                <td><span class="pill must">Indispensable</span></td>
+              </tr>
+              <tr>
+                <td><strong>ccstatusline</strong><br><span class="sources">sirmalloc</span></td>
+                <td>Barre d'état : modèle, % de contexte, git, consommation. Zéro token.</td>
+                <td>Tu vois quand faire <code>/clear</code>.</td>
+                <td><code>npx -y ccstatusline@latest</code> puis « Pinned global install »</td>
+                <td><span class="pill must">Indispensable</span></td>
+              </tr>
+              <tr>
+                <td><strong>skill-creator</strong><br><span class="sources">officiel Anthropic</span></td>
+                <td>Transforme une méthode qui marche en skill testé, et améliore les descriptions pour qu'elles se déclenchent.</td>
+                <td>Arrête de réexpliquer la même méthode à chaque session.</td>
+                <td><code>/plugin install skill-creator@claude-plugins-official</code></td>
+                <td><span class="pill must">Indispensable</span></td>
+              </tr>
+              <tr>
+                <td><strong>Superpowers</strong><br><span class="sources">obra · marketplace officielle</span></td>
+                <td>Méthode complète pour le code : brainstorming → plan → tests d'abord → revue par sous-agent.</td>
+                <td>Plus de qualité ; plus de tokens sur les petites tâches (choisir <em>executing-plans</em> pour le petit travail).</td>
+                <td><code>/plugin install superpowers@claude-plugins-official</code></td>
+                <td><span class="pill must">Pour le code</span></td>
+              </tr>
+              <tr>
+                <td><strong>Ponytail</strong><br><span class="sources">DietrichGebert</span></td>
+                <td>Échelle « le moins de code possible » avant d'écrire : réutiliser, bibliothèque standard, une ligne.</td>
+                <td>Seul économiseur avec un gain indépendant significatif : environ −10 % de coût et −15 % de code sur la charge testée (JetBrains, 80 paires ; l'intervalle de confiance frôle zéro).</td>
+                <td><code>/plugin marketplace add DietrichGebert/ponytail</code><br><code>/plugin install ponytail@ponytail</code></td>
+                <td><span class="pill must">Pour le code</span></td>
+              </tr>
+              <tr>
+                <td><strong>frontend-design</strong><br><span class="sources">officiel Anthropic</span></td>
+                <td>Pages et sites avec une vraie direction artistique.</td>
+                <td>Plus d'un million d'installations dans le répertoire officiel.</td>
+                <td><code>/plugin install frontend-design@claude-plugins-official</code></td>
+                <td><span class="pill nice">Si tu fais des sites</span></td>
+              </tr>
+              <tr>
+                <td><strong>Context7</strong><br><span class="sources">upstash</span></td>
+                <td>Documentation à jour des bibliothèques : moins d'API inventées, moins d'allers-retours.</td>
+                <td>Utile dès qu'on code contre une bibliothèque.</td>
+                <td><code>npx ctx7 setup --claude</code> (mode CLI + skills)</td>
+                <td><span class="pill nice">Si tu codes</span></td>
+              </tr>
+              <tr>
+                <td><strong>caveman</strong> (skill seul, mode lite)<br><span class="sources">JuliusBrussee</span></td>
+                <td>Réponses télégraphiques ; <code>/caveman-compress CLAUDE.md</code> raccourcit un fichier mémoire d'environ 46 %.</td>
+                <td>Annonce 65 % ; mesuré −8,5 % de tokens de sortie (JetBrains). Ses règles ajoutent ~1 000 tokens par appel.</td>
+                <td><code>claude plugin marketplace add JuliusBrussee/caveman</code><br><code>claude plugin install caveman@caveman</code></td>
+                <td><span class="pill nice">Pour le code, jamais pour l'écriture</span></td>
+              </tr>
+              <tr>
+                <td><strong>context-mode</strong><br><span class="sources">mksglu</span></td>
+                <td>Fait passer les grosses sorties (pages web, logs, Playwright) par un bac à sable ; seul le résultat entre dans le contexte.</td>
+                <td>Chiffres de l'auteur uniquement. Ajoute beaucoup de hooks.</td>
+                <td><code>/plugin marketplace add mksglu/context-mode</code><br><code>/plugin install context-mode@context-mode</code></td>
+                <td><span class="pill nice">Sessions web lourdes</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Un seul cadre de travail : Superpowers <em>ou</em> compound-engineering <em>ou</em> GSD Core. Les empiler multiplie les hooks, les skills et les tokens.</p>
+
+        <h3>À éviter</h3>
+        <div class="tbl">
+          <table>
+            <thead><tr><th scope="col">Outil</th><th scope="col">Pourquoi</th><th scope="col">Verdict</th></tr></thead>
+            <tbody>
+              <tr><td><strong>claude-mem</strong></td><td>Son « observateur » en arrière-plan fait tourner Claude sur chaque transcript : un ticket ouvert en septembre 2026 mesure 43 % du trafic de tokens consommé par lui seul (7,9 M en 4 h). La mémoire auto intégrée couvre l'essentiel.</td><td><span class="pill skip">Éviter</span></td></tr>
+              <tr><td><strong>RTK</strong> et hooks de compression Bash</td><td>Annonce 60 à 90 % ; mesuré +7,6 % de coût à effort bas (JetBrains). Les outils Read, Grep et Glob de Claude Code passent à côté du hook. À garder seulement si <code>/usage</code> montre un gain sur ton travail.</td><td><span class="pill warn">Mesurer d'abord</span></td></tr>
+              <tr><td>Routeurs « Claude gratuit » (OmniRoute, 9router, free-claude-code, sub2api…)</td><td>Les conditions d'Anthropic interdisent de faire passer des identifiants Pro ou Max par une application tierce. Risque de blocage du compte.</td><td><span class="pill bad">Interdit</span></td></tr>
+              <tr><td>Méga-paquets (ECC, gstack)</td><td>Des centaines de skills et de commandes : la liste déborde du budget de 1 % et les déclenchements se dégradent. Prendre un skill à la fois si besoin.</td><td><span class="pill skip">Éviter</span></td></tr>
+              <tr><td>claude-context (Zilliz), mem0, Graphiti, Letta</td><td>Ton code part vers des services d'embedding, ou c'est de l'infrastructure pour construire ses propres agents.</td><td><span class="pill skip">Hors sujet</span></td></tr>
+              <tr><td>BMAD, SuperClaude, spec-kit</td><td>Cérémonie lourde pour un créateur solo ; recoupent Superpowers.</td><td><span class="pill skip">Éviter</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout">
+          <strong>Sécurité</strong>
+          Un audit de Snyk sur 3 984 skills publiés sur des annuaires communautaires a trouvé une faille critique dans 13,4 % d'entre eux. Avant d'activer un plugin : lire son <code>SKILL.md</code> et son <code>hooks/hooks.json</code>, préférer la marketplace officielle, puis vérifier <code>/hooks</code> et <code>/mcp</code> après l'installation.
+        </div>
+      </section>

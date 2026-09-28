@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./renders/**)",
+      "Read(./**/*.mp4)",
+      "Read(./**/*.mov)",
+      "Read(./**/*.webm)",
+      "Read(./**/*.wav)",
+      "Read(./.env)"
+    ]
+  }
+}

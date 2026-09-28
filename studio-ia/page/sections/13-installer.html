@@ -1,0 +1,42 @@
+      <section class="chap" id="installer" data-short="Installer et checklist">
+        <header>
+          <span class="plan"><i style="background:var(--s-green)"></i>Plan 12</span>
+          <button type="button" class="seek" data-seek="fin"></button>
+          <h2>À installer aujourd'hui, et la checklist de tournage</h2>
+        </header>
+        <p class="intro">Tout ce qui suit est dans le dossier <code>studio-ia/</code> du dépôt : deux skills prêts à copier et un gabarit de projet vidéo.</p>
+
+        <div class="grid">
+          <div class="panel r">
+            <span class="tag">skill</span>
+            <h4>higgsfield-genjutsu</h4>
+            <p>Choisit le bon modèle Genjutsu, vérifie les médias et leurs rôles, demande le devis, envoie une seule fois, diagnostique un échec.</p>
+          </div>
+          <div class="panel y">
+            <span class="tag">skill</span>
+            <h4>seedance-2-5</h4>
+            <p>Réglages exacts, prix, gabarits de prompt (plan par plan, références, son), prolongation et retouche, protocole brouillon → final.</p>
+          </div>
+          <div class="panel c">
+            <span class="tag">gabarit</span>
+            <h4>templates/projet-video</h4>
+            <p>CLAUDE.md court, réglages qui empêchent Claude de lire les rendus lourds, dossiers brief / refs / prompts / decisions / renders.</p>
+          </div>
+        </div>
+
+        <div class="code"><span class="label">Claude Code · Git Bash sous Windows</span><pre>git clone -b claude/claude-workflow-video-optimization-ycjfiw https://github.com/mattreveyrand/mattreveyrand.github.io.git
+cp -r mattreveyrand.github.io/studio-ia/skills/* ~/.claude/skills/
+cp -r mattreveyrand.github.io/studio-ia/templates/projet-video ~/Projets/ma-premiere-video</pre></div>
+        <p>Redémarre ensuite Claude Code : les skills sont lus au démarrage. Pour claude.ai ou Cowork, zippe le dossier d'un skill et importe-le dans Réglages → Personnaliser → Skills.</p>
+
+        <h3>La checklist</h3>
+        <ol class="steps">
+          <li><div>Une session par tâche ; modèle et effort choisis au départ. <code>/clear</code> entre deux sujets.</div></li>
+          <li><div>CLAUDE.md court ; le reste en <code>rules/</code>, en skills et dans le second cerveau.</div></li>
+          <li><div><code>/usage</code> une fois par semaine : ce qui pèse sans servir s'en va.</div></li>
+          <li><div>Actifs verrouillés avant de générer : planche personnage ou Soul ID, décor, objet.</div></li>
+          <li><div>Brouillon en 480p, devis (<code>get_cost</code>), un seul envoi, final en 1080p.</div></li>
+          <li><div>Genjutsu : source de 4 à 30 s d'un seul plan, exactement une vidéo en rôle <code>video</code>, les images en rôle <code>image</code>, des identifiants confirmés.</div></li>
+          <li><div>En fin de session : décisions, réussites, échecs et coûts écrits dans <code>decisions/</code>, datés.</div></li>
+        </ol>
+      </section>
