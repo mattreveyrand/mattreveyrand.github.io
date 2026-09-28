@@ -39,8 +39,14 @@ qui contient `SKILL.md`), puis *Personnaliser (Customize, dans la barre latéral
 cd studio-ia/video
 python3 fetch_fonts.py        # une fois : polices embarquées dans le SVG
 python3 build.py              # écrit manuel-studio-ia.svg + chapters.json
-FFMPEG=ffmpeg node export.mjs mp4 1920   # export MP4 image par image (Playwright)
+FFMPEG=ffmpeg node export.mjs mp4 1920   # export MP4 : plusieurs navigateurs en parallèle, ~3 min ici
 cd ../page && python3 assemble.py        # reconstruit index.html
 ```
 
 Le contenu des plans est dans la liste `SCENES` en bas de `video/build.py`.
+
+L'export capture chaque image en PNG sans perte dans plusieurs navigateurs Chromium
+en parallèle (un par cœur, moins un), puis un seul ffmpeg encode dans l'ordre avec
+des réglages fixes (H.264, CRF 20, preset slow) : la qualité ne dépend pas du nombre
+de navigateurs. `--workers N` force ce nombre. Mesuré sur une machine à 4 cœurs :
+9 min 30 avant, 3 min 13 maintenant, image identique (SSIM 0,99999).
