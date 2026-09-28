@@ -29,6 +29,7 @@ avec `models_explore` (`action: "get"`, `model_id: "seedance_2_5"`) ou
 | `generate_audio` | true (défaut) | le couper ne baisse pas le prix |
 | `bitrate_mode` | `standard` · `high` | |
 | `extension_mode` | `forward` · `backward` | obligatoire en `video_extension`, interdit ailleurs |
+| validation | `omni_reference` : au moins une référence · `video_edit` : exactement une `video_references` · `video_extension` : au moins une `video_references` | sinon refus |
 | rôles `medias` | `start_image`, `end_image`, `image_references`, `video_references`, `audio_references` | `start_image`/`end_image` seulement en `omni_reference` ; 50 références max, 30 images max |
 
 ## Prix (devis du connecteur, 28.09.2026)
@@ -43,7 +44,7 @@ Il n'y a pas de seed sur Higgsfield : un nouveau rendu est toujours une
 nouvelle prise. Le brouillon valide le prompt, pas la prise.
 
 1. **Brief** : lire la fiche du plan (`brief/plan-NN.md`) si elle existe.
-2. **Prompt** : gabarit ci-dessous, en anglais, moins de ~200 mots ; seules les
+2. **Prompt** : gabarit ci-dessous, en anglais, moins de ~200 tokens (≈ 150 mots ; un prompt multi-plans à sections peut dépasser) ; seules les
    répliques sont dans la langue parlée.
 3. **Devis** : même appel avec `"get_cost": true`. Annoncer le prix ; au-delà
    de 50 crédits, attendre l'accord explicite de l'utilisateur.
@@ -55,7 +56,7 @@ nouvelle prise. Le brouillon valide le prompt, pas la prise.
    propres à la 2.5.
 5. **Final** :
    - la prise du brouillon te plaît → l'agrandir plutôt que la refaire :
-     `upscale_video` (Bytedance, préréglage `aigc`, 1080p à 4K, 24 i/s) ;
+     `upscale_video` avec `{"params": {"provider": "bytedance", "video_id": "<job_id>", "width": <largeur source en px>, "height": <hauteur source en px>, "preset": "aigc", "resolution": "4k", "fps": 24}}` (`width` et `height` obligatoires ; `resolution` 1080p · 2k · 4k ; fps > 30 double le prix). Cet outil n'a pas de devis : pas de `get_cost`, prévenir l'utilisateur que le prix n'est connu qu'après ;
    - sinon → même prompt en 1080p, durée finale, un seul envoi, puis
      `jobs_wait` (`timeout_seconds: 15`).
    Jamais de renvoi tant que le premier job n'a pas de statut ; après un
@@ -83,18 +84,20 @@ SHOT 2 (4-8s) — <valeur de plan + caméra>: <action>. Ends with <état visible
 Dialogue language: natural Parisian French.   ← seulement s'il y a des répliques
 <Name> says: {<réplique en français>}
 
-AUDIO: (<musique>) <<bruitages>>. No music.   ← « No music. » en texte simple, jamais entre ()
+AUDIO: (<musique>) <<bruitages>>.   ← sans musique : supprimer (<musique>) et finir par « No music. » en texte simple, jamais entre ()
 ```
 
 Règles :
 - Une ligne par sujet de référence, avec ce qu'il faut ignorer. Jamais
   « @Images 1 to 4 define four characters ». Plusieurs vues d'un même sujet :
   « All three images define one lamp. The output must contain only one lamp. »
-- Planche personnage en référence : ajouter « Do not take the gray backdrop,
+- Planche personnage en référence : ajouter « Do not take the white or gray backdrop,
   the panel borders, or the multi-view layout. »
 - Une caméra par plan. Pour une action rapide, décrire la position de départ
   et d'arrivée du corps, pas le mouvement intermédiaire.
-- Formuler en positif (pas de prompt négatif) : « tack sharp », pas « no blur ».
+- Pas de prompt négatif : défauts d'image formulés en positif (« tack sharp »,
+  pas « no blur ») ; exclusions de contenu courtes en fin de prompt
+  (« No on-screen text, no watermark »), comme dans les gabarits Higgsfield.
 - Pas de personnalité réelle, de marque ou de personnage sous licence :
   décrire sans nommer (sinon refus pour propriété intellectuelle).
 - Action physique lourde et gros plan de jeu : deux générations séparées.

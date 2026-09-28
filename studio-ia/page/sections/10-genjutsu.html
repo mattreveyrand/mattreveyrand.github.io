@@ -4,7 +4,7 @@
           <button type="button" class="seek" data-seek="genjutsu"></button>
           <h2>Genjutsu : la fiche pour ne plus rater</h2>
         </header>
-        <p class="intro">« Genjutsu » n'est pas un nom de modèle. C'est une famille de deux modèles vidéo de Higgsfield, qu'on choisit selon ce qu'on veut faire. Tout ce qui suit a été relevé directement sur le connecteur Higgsfield le 28 septembre 2026.</p>
+        <p class="intro">« Genjutsu » n'est pas un nom de modèle. C'est une famille de deux modèles vidéo de Higgsfield, qu'on choisit selon ce qu'on veut faire. Les identifiants, les rôles des médias et les réglages ont été relevés sur le connecteur Higgsfield le 28 septembre 2026 ; la recette et les modèles de prompt sont des bonnes pratiques déduites des workflows et des guides Higgsfield, à valider sur un brouillon 480p.</p>
 
         <div class="grid">
           <div class="panel r">
@@ -30,8 +30,8 @@
 
         <h3>La recette</h3>
         <ol class="steps">
-          <li><div><strong>Préparer la vidéo.</strong> Un seul plan, sans coupe, un seul sujet bien visible, cadrage stable, 4 à 15 secondes. Découpe-la avant (ffmpeg, ou n'importe quel éditeur) : la longueur et la résolution font le prix.</div></li>
-          <li><div><strong>Préparer l'image.</strong> Même cadrage que la vidéo (plein pied si la vidéo est en plein pied), sujet net et bien éclairé, membres visibles. Pour un personnage, une planche du workflow <code>character-sheet</code> est idéale.</div></li>
+          <li><div><strong>Préparer la vidéo.</strong> Un seul plan, sans coupe, un seul sujet bien visible, cadrage stable, 4 à 15 secondes conseillées (la page Genjutsu de Higgsfield annonce des sources de 4 à 30 s ; le connecteur n'indique pas de limite). Découpe-la avant (ffmpeg, ou n'importe quel éditeur) : la longueur et la résolution font le prix.</div></li>
+          <li><div><strong>Préparer l'image.</strong> Même cadrage que la vidéo (en pied si la vidéo est en pied), sujet net et bien éclairé, membres visibles. Pour un personnage, une planche du workflow <code>character-sheet</code> est idéale.</div></li>
           <li><div><strong>Envoyer les fichiers.</strong> Dans l'app Claude : tape <code>/genjutsu</code> et dépose la vidéo et les photos dans le widget d'upload. Le connecteur n'accepte que des identifiants de média confirmés, jamais une URL ni un chemin de fichier.</div></li>
           <li><div><strong>Demander le devis.</strong> <code>"get_cost": true</code> : le prix s'affiche, rien n'est lancé.</div></li>
           <li><div><strong>Brouillon en 480p ou 720p,</strong> un seul envoi, puis attendre le résultat. Le 1080p seulement quand le mouvement est bon.</div></li>
@@ -53,7 +53,7 @@
 matching their exact shape, colors, materials and logo placement. Keep the man, his motion,
 the camera moves, cuts, lighting, background, timing and every on-screen text from @Video1
 exactly the same.</pre></div>
-        <p>Les étiquettes <code>@Video1</code>, <code>@Image1</code>… suivent l'ordre des médias envoyés ; c'est la convention des workflows Higgsfield. Nommer <em>une seule</em> cible, sans ambiguïté (couleur, position, qui la porte), et dire explicitement ce qui ne doit pas bouger.</p>
+        <p>Les étiquettes <code>@Video1</code>, <code>@Image1</code>… suivent l'ordre des médias envoyés, comme dans le workflow ad-multiplier ; pour Genjutsu ce n'est pas documenté, donc nommer aussi la cible en clair (« the man in the video », « the shoes in the photo »). Nommer <em>une seule</em> cible, sans ambiguïté (couleur, position, qui la porte), et dire explicitement ce qui ne doit pas bouger.</p>
 
         <h3>Pourquoi ça échoue</h3>
         <div class="tbl">

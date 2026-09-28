@@ -17,7 +17,7 @@ Réponds en français. Les prompts de génération s'écrivent en anglais.
 ## Règles Higgsfield
 
 1. Devis avant chaque rendu : même appel avec `"get_cost": true`, annoncer le prix, attendre mon accord au-delà de 50 crédits.
-2. Brouillons en 480p ou 720p, 5 s. Le 1080p seulement pour un plan validé.
+2. Brouillons en 480p, 5 à 8 s. Le 1080p seulement pour un plan validé.
 3. Un seul envoi par job. Après un timeout, vérifier le statut du job avant tout renvoi.
 4. Genjutsu : `hf_mult_motion_control` (mouvement) ou `hf_mult_replace_object` (remplacement), exactement une vidéo en rôle `video`, images en rôle `image`, des media_id confirmés.
 5. Aucune publication (TikTok, YouTube, Instagram) sans mon accord explicite dans la conversation.

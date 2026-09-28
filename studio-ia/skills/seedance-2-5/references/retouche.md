@@ -2,7 +2,7 @@
 
 Gabarit officiel des workflows Higgsfield (workflow `ad-multiplier`, fichier
 `references/prompt-writer.md`, relevé le 28.09.2026). Seedance 2.5 en
-`video_edit` et le modèle `ad_multiplier` utilisent le même contrat.
+`video_edit` : le modèle `ad_multiplier` est « powered by Seedance 2.5 » (même schéma de paramètres) ; ce contrat est écrit pour lui et on l'applique par extension à `seedance_2_5`, à valider sur un brouillon 480p.
 
 ## Règles
 
@@ -14,6 +14,7 @@ Gabarit officiel des workflows Higgsfield (workflow `ad-multiplier`, fichier
 - Une image de personne vaut pour le look complet (visage, cheveux, vêtements,
   accessoires), sauf si une image de vêtement séparée est fournie.
 - `video_edit` facture toute la durée de la source : couper la source avant.
+- Son : le workflow ad-multiplier rend la retouche en muet (`generate_audio: false`) puis remet l'audio d'origine de la source au montage (ffmpeg). Faire de même pour garder la bande-son et les voix intactes.
 - Source de 4 à 30 s ; hors de cet intervalle, le workflow refuse.
 
 ## Gabarit COMPACT
@@ -40,7 +41,7 @@ Ajouter la phrase d'exclusion :
 The original source person identified as <target> in @Video1 must never appear in any frame of the output. Replace that person completely with <ALIAS> from @ImageN in every appearance, transferring the complete reference-defined look and retaining only the original performance, pose, blocking, interactions, and timing.
 ```
 
-Puis un bloc IDENTITY, un résumé du rendu, et une dernière phrase
+Ordre complet du gabarit DÉTAILLÉ : 1) avant tout, une déclaration par référence : « @ImageN — <ALIAS>, the complete replacement look for <TARGET>: <identité, cheveux, tenue, chaussures, accessoires>. Transfer this entire look from @ImageN, including the full outfit and all worn accessories. » ; 2) le bloc « Preserve every caption… » ; 3) « Video edit. Keep this @Video1 clip exactly as it is — the same shots and cuts, camera moves, framing, […]. Change only <périmètre>… » ; 4) des blocs numérotés « 1. REPLACE — … » (une opération par bloc, avec la phrase d'exclusion ci-dessus) ; 5) « IDENTITY lock: … » ; 6) une phrase « Render … » ; 7) la dernière phrase
 « Everything else — […] — stays exactly the same. »
 
 La personne de remplacement doit être un adulte, avec son consentement si

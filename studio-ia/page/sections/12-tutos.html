@@ -20,7 +20,7 @@
         <h3>Les cours à suivre, dans cet ordre</h3>
         <ol class="steps">
           <li><div><strong>Getting Started with Cinema Studio</strong> : l'interface, les réglages de caméra et d'objectif qui remplacent du texte de prompt.</div></li>
-          <li><div><strong>The 3-Step Realistic AI Ad Workflow</strong> : la méthode de base. Actifs d'abord (personnage en gros plan visage + plein pied face et dos), puis un skill Claude qui transforme le script en liste de plans et en prompts Seedance, puis génération et assemblage. Sauter une étape casse le résultat.</div></li>
+          <li><div><strong>The 3-Step Realistic AI Ad Workflow</strong> : la méthode de base. Références d'abord (personnage en gros plan du visage + en pied, de face et de dos), puis un skill Claude qui transforme le script en liste de plans et en prompts Seedance, puis génération et assemblage. Sauter une étape casse le résultat.</div></li>
           <li><div><strong>Add AI VFX to Real Footage</strong> : vidéo vers vidéo sur de vraies prises. Nommer d'abord tout ce qui ne doit pas bouger (identité, expression, costume, mouvement de caméra), puis la seule chose qui change et à quelle seconde. Garder un ancrage réel.</div></li>
           <li><div><strong>Build an Ultra-Realistic Short Film in 4K</strong> (court métrage « Santiago ») : Claude écrit le scénario, un skill construit les prompts, Seedance tourne. Contient une leçon sur la lecture des prises ratées.</div></li>
           <li><div><strong>Build an AI Ad Agency with Claude + Higgsfield</strong> : brancher Claude, faire l'accueil client, poser un contrôle qualité, compter la rentabilité.</div></li>
@@ -28,11 +28,11 @@
 
         <h3>Ce que tous les cours répètent</h3>
         <ul>
-          <li><strong>Verrouiller les actifs avant de générer.</strong> Pour la vidéo : une planche personnage (fond gris neutre, face, trois-quarts, profil, plein pied, une expression forte) enregistrée comme <em>Element</em>, qu'on mentionne avec <code>@</code> dans le prompt. <strong>Soul ID</strong> sert aux images (Soul 2.0, Soul Cinema) : 5 à 20 photos variées, entraîné dans le modèle qu'on va utiliser, et il ne s'utilise pas directement dans Seedance ou Kling.</li>
+          <li><strong>Verrouiller les références avant de générer.</strong> Pour un personnage : une planche (fond neutre, face, trois-quarts, profil, en pied, une expression forte). Avec Seedance 2.5, on la passe en référence (<code>image_references</code>) avec une ligne de rôle <code>@Image1 defines…</code>. Les <em>Elements</em> de Higgsfield, qu'on appelle avec <code>@</code> dans l'interface, marchent avec Seedance 2.0, Kling 3.0 et Cinema Studio, pas avec Seedance 2.5. <strong>Soul ID</strong> sert aux images (Soul 2.0, Soul Cinema) : 5 à 20 photos variées (8 à 12, c'est l'idéal), entraîné dans le modèle qu'on va utiliser ; il ne s'utilise pas directement dans Seedance ou Kling.</li>
           <li><strong>Un plan, un changement.</strong> Une seule variable modifiée par nouvel essai, sinon on ne sait pas ce qui a amélioré ou cassé le résultat.</li>
           <li><strong>La caméra par les réglages plutôt que par le texte</strong> quand l'outil propose des préréglages (Cinema Studio : mouvements, objectifs, focale, ouverture).</li>
           <li><strong>Action rapide</strong> : décrire la position du corps au début et à la fin, pas le mouvement entre les deux.</li>
-          <li><strong>Formuler en positif</strong> : la plupart des modèles n'ont pas de prompt négatif. « Tack sharp » plutôt que « no blur ».</li>
+          <li><strong>Pas de prompt négatif</strong> : les défauts d'image se formulent en positif (« tack sharp » plutôt que « no blur ») ; les exclusions de contenu, courtes, vont en fin de prompt (« No on-screen text, no watermark »), comme dans les gabarits de Higgsfield.</li>
           <li><strong>Blocages</strong> : personnalités réelles, marques, personnages de franchise, équipes sportives déclenchent un refus (propriété intellectuelle ou droit à l'image). Décrire sans nommer.</li>
         </ul>
 
@@ -42,12 +42,12 @@
             <thead><tr><th scope="col">Skill</th><th scope="col">Rôle</th><th scope="col">Installer</th></tr></thead>
             <tbody>
               <tr><td><strong>higgsfield-ai/skills</strong> (officiel, v0.13.0)</td><td>Exécute : generate, soul-id, product-photoshoot, brandkit, video-explainer, youtube-thumbnail… via la CLI <code>higgsfield</code>.</td><td><code>npm install -g @higgsfield/cli</code><br><code>higgsfield auth login</code><br><code>npx skills add higgsfield-ai/skills</code></td></tr>
-              <tr><td><strong>OSideMedia/higgsfield-ai-prompt-skill</strong> (communautaire, MIT)</td><td>Écrit les prompts : Seedance 2.5, caméra, jeu, Soul, dépannage, recettes ; un linter de prompt inclus.</td><td><code>git clone https://github.com/OSideMedia/higgsfield-ai-prompt-skill ~/.claude/skills/higgsfield-prompts</code></td></tr>
-              <tr><td>Connecteur MCP officiel</td><td>Pour claude.ai, l'app desktop et Cowork (pas de terminal). Widgets d'upload et de résultats.</td><td>Réglages → Connecteurs → ajouter <code>https://mcp.higgsfield.ai/mcp</code></td></tr>
+              <tr><td><strong>OSideMedia/higgsfield-ai-prompt-skill</strong> (communautaire, MIT)</td><td>Écrit les prompts : Seedance 2.5, caméra, jeu, Soul, dépannage, recettes ; un linter de prompt inclus.</td><td><code>git clone https://github.com/OSideMedia/higgsfield-ai-prompt-skill ~/.claude/skills/higgsfield</code><br>Il s'appelle <code>/higgsfield</code>, se déclenche sur toute mention de Higgsfield et impose la lecture de deux fichiers d'environ 80 Ko (≈ 20 000 tokens) à chaque prompt. Pour économiser les tokens : le cloner hors de <code>~/.claude/skills</code> (par ex. <code>~/ref/higgsfield-prompts</code>) et le consulter à la demande.</td></tr>
+              <tr><td>Connecteur MCP officiel</td><td>Pour claude.ai, l'app desktop et Cowork (pas de terminal). Widgets d'upload et de résultats.</td><td>Personnaliser → Connecteurs → « + » → Ajouter un connecteur personnalisé → <code>https://mcp.higgsfield.ai/mcp</code> (offre gratuite : un seul connecteur personnalisé ; Team/Enterprise : ajout par un propriétaire)</td></tr>
             </tbody>
           </table>
         </div>
-        <p>Dans Claude Code, Higgsfield recommande la CLI + skills plutôt que le MCP : c'est plus léger en contexte que la centaine d'outils du connecteur. Si tu veux quand même le MCP dans un projet : <code>claude mcp add --transport http higgsfield https://mcp.higgsfield.ai/mcp</code>, puis <code>/mcp</code> → Authenticate.</p>
+        <p>Dans Claude Code, Higgsfield recommande la CLI + skills plutôt que le MCP : la CLI évite de charger les schémas des outils MCP. L'écart est toutefois faible : Claude Code diffère par défaut les définitions d'outils MCP (tool search) et ne charge au départ que leurs noms et les instructions du serveur. Si tu veux quand même le MCP dans un projet : <code>claude mcp add --transport http higgsfield https://mcp.higgsfield.ai/mcp</code>, puis <code>/mcp</code> → Authenticate.</p>
 
         <h3>Les créateurs</h3>
         <ul>

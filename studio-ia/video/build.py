@@ -420,7 +420,7 @@ def sc_arch(s: Scene):
     heading(s, "L'architecture : global, projet, règles",
             "Chaque fichier a une portée. Ce qui est global se paie dans toutes les sessions.")
     left = [("~/.claude/", C["yellow"], "toi, partout"),
-            ("├─ CLAUDE.md", C["chalk"], "qui tu es, règles dures, < 200 lignes"),
+            ("├─ CLAUDE.md", C["chalk"], "qui tu es, règles dures, < 100 lignes"),
             ("├─ settings.json", C["chalk"], "permissions, hooks, plugins"),
             ("├─ rules/*.md", C["chalk"], "chargées si les fichiers matchent paths:"),
             ("├─ skills/", C["chalk"], "savoir-faire réutilisable"),
@@ -445,7 +445,7 @@ def sc_arch(s: Scene):
 
 def sc_tokens(s: Scene):
     heading(s, "Tokens : les 8 gestes qui changent la facture",
-            "Par ordre d'impact. Aucun ne coûte de qualité.")
+            "Par ordre d'impact. Aucun ne sacrifie la qualité.")
     tiles = [
         ("/clear", "entre deux tâches sans rapport : repartir à zéro est gratuit"),
         ("/compact", "avec une consigne : « garde les décisions et les fichiers touchés »"),
@@ -454,7 +454,7 @@ def sc_tokens(s: Scene):
         ("CLI > skill > MCP", "une CLI appelée en Bash ne coûte rien tant qu'on ne l'utilise pas"),
         ("Sous-agents", "l'exploration lourde tourne ailleurs ; seul le résumé revient"),
         ("Modèle fixé", "choisir le modèle au début : en changer en route vide le cache"),
-        ("Plan d'abord", "Shift+Tab → plan mode : valider avant d'écrire évite de tout refaire"),
+        ("Plan d'abord", "Shift+Tab → mode plan : valider avant d'écrire évite de tout refaire"),
     ]
     tw, th = 272, 150
     for i, (k, v) in enumerate(tiles):
@@ -519,7 +519,7 @@ def sc_pipeline(s: Scene):
             s.add(arrow(x + nw + 3, y + nh / 2, x + nw + gap - 3, y + nh / 2, C["mute"], 2), 1.1 + i * 0.45, 0.3, "none")
     loop_d = f"M{64 + 2 * (nw + gap) + nw / 2},{y + nh + 12} C{64 + 2 * (nw + gap) + nw / 2},{y + nh + 80} {64 + 3 * (nw + gap) + nw / 2},{y + nh + 80} {64 + 3 * (nw + gap) + nw / 2},{y + nh + 12}"
     s.draw(loop_d, C["yellow"], 4.2, 0.8, 2, 320)
-    s.add(text(64 + 2.5 * (nw + gap) + nw / 2, y + nh + 104, "itérer ici : 3 à 5 brouillons", 16, C["yellow"], FB, 500, "middle"), 4.6, 0.5)
+    s.add(text(64 + 2.5 * (nw + gap) + nw / 2, y + nh + 104, "itérer ici : ~3 brouillons", 16, C["yellow"], FB, 500, "middle"), 4.6, 0.5)
     px = 64 + 4 * (nw + gap)
     price = (text(px, y + nh + 52, "SEEDANCE 2.5 · CRÉDITS PAR SECONDE", 13, C["mute"], FM, 500, ls=1.5)
              + "".join(text(px + i * 170, y + nh + 92, a, 30, C["chalk"], FD, 800) + text(px + i * 170, y + nh + 114, b, 13, C["mute"], FM)
@@ -551,7 +551,7 @@ def sc_genjutsu(s: Scene):
     fails = ["modèle « genjutsu » : n'existe pas",
              "0 ou 2 vidéos dans medias",
              "une URL au lieu d'un media_id",
-             "source hors 4–30 s, plusieurs plans",
+             "source trop longue ou en plusieurs plans",
              "renvoyer pendant qu'un job tourne",
              "essais gratuits : web seulement"]
     g = card(880, 200, 336, 270) + text(904, 240, "POURQUOI ÇA ÉCHOUE", 15, C["red"], FM, 600, ls=2)
@@ -595,7 +595,7 @@ def sc_seedance(s: Scene):
     ptxt, _ = para(84, 480, prompt, 18, 1080, 1.45, C["chalk"], FM)
     s.static(card(64, 446, W - 128, 110))
     s.typewrite(64, 446, W - 128, 110, ptxt, 4.2, 5.5)
-    bottom_line(s, "Prompt en anglais, une caméra par plan, répliques françaises entre { } avec « Dialogue language: French ».", 10.0, C["yellow"], y=626)
+    bottom_line(s, "Prompt en anglais, une caméra par plan, répliques en { } après « Dialogue language: natural Parisian French. »", 10.0, C["yellow"], y=626)
 
 
 def sc_end(s: Scene):

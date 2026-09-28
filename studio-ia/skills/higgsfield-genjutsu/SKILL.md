@@ -42,9 +42,10 @@ d'une génération précédente. Jamais une URL https, jamais un chemin local.
 - Fichiers sur l'ordinateur, dans l'app Claude : appeler `media_upload_widget`
   avec `type: "auto"`, `multiple: true`, **seul outil du tour**. L'utilisateur
   choisit la vidéo et les photos dans le widget, qui renvoie les media_id.
+- MCP dans Claude Code (pas de widget) : `media_upload` (nom du fichier) → PUT des octets sur `upload_url` → `media_confirm` seulement après un HTTP 200 → `media_id`.
 - Média sur le web : `media_import_url` → `media_id`.
 - Rendu Higgsfield précédent : réutiliser son `job_id`.
-- CLI (Claude Code) : les flags `--video` / `--image` acceptent un chemin et
+- CLI (Claude Code) : les flags `--video-references` / `--image-references` (les alias `--video` / `--image` n'existent que si le schéma les expose) acceptent un chemin et
   uploadent tout seuls. Vérifier les noms de flags une fois avec
   `higgsfield model get hf_mult_motion_control --json`.
 
@@ -54,7 +55,7 @@ d'une génération précédente. Jamais une URL https, jamais un chemin local.
 - [ ] Au moins une image, rôle `image` (le serveur les range en `image_references`).
 - [ ] Pour le transfert de mouvement : vidéo conductrice avec **un seul sujet**,
       corps entier visible, cadrage stable, sans coupe, bien éclairée, fond lisible.
-- [ ] Image du personnage : même cadrage que la vidéo (plein pied si la vidéo est
+- [ ] Image du personnage : même cadrage que la vidéo (en pied si la vidéo est
       en plein pied), pose neutre, membres visibles, pas de flou ni d'accessoires
       qui cachent les mains.
 - [ ] Pour le remplacement : l'objet à remplacer est net et visible pendant tout
@@ -111,7 +112,7 @@ réutiliser le `job_id` et vérifier son statut avant toute nouvelle tentative.
 | Refus sur `value` | URL ou chemin au lieu d'un UUID | `media_upload_widget` / `media_import_url` |
 | « free gens » refusés | essais gratuits demandés via MCP | non disponibles sur le connecteur : web uniquement |
 | Crédits insuffisants | solde | `balance`, puis `get_cost` pour dimensionner |
-| Le job tourne mais le résultat est faux (mauvaise cible, membres qui fondent) | vidéo chargée (plusieurs sujets, coupes, sujet qui sort du cadre), cible mal nommée | recouper la vidéo à un seul plan net (4 à 15 s conseillés ; la durée max n'est pas documentée), prompt « Replace only… / Keep … exactly the same » |
+| Le job tourne mais le résultat est faux (mauvaise cible, membres qui fondent) | vidéo chargée (plusieurs sujets, coupes, sujet qui sort du cadre), cible mal nommée | recouper la vidéo à un seul plan net (4 à 15 s conseillés ; la page Genjutsu de Higgsfield annonce des sources de 4 à 30 s ; le connecteur n'indique pas de limite), prompt « Replace only… / Keep … exactly the same » |
 | Facture bien plus haute que prévu | renvois pendant qu'un job tourne ; source longue en 1080p | un seul envoi + `jobs_wait` ; devis ; brouillon 480p |
 | Visage qui dérive | image de référence trop petite ou de profil | portrait net de face, même lumière que la vidéo |
 | Rien ne change (remplacement) | prompt vague | nommer l'objet source *et* l'objet cible, préciser « keep everything else unchanged » |

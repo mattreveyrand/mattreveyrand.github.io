@@ -11,10 +11,10 @@
             <thead><tr><th scope="col">Paramètre</th><th scope="col">Valeurs</th><th scope="col">À savoir</th></tr></thead>
             <tbody>
               <tr><td><code>mode</code></td><td><code>t2v</code> · <code>omni_reference</code> · <code>video_edit</code> · <code>video_extension</code></td><td><code>t2v</code> refuse toute référence ; <code>start_image</code> et <code>end_image</code> ne marchent qu'en <code>omni_reference</code>.</td></tr>
-              <tr><td><code>duration</code></td><td>4 à 30 s (défaut 5)</td><td>Ignorée en <code>video_edit</code> : facturé sur la durée de la vidéo source.</td></tr>
+              <tr><td><code>duration</code></td><td>4 à 30 s (défaut 5)</td><td>Ignorée en <code>video_edit</code> : la facturation suit la durée de la vidéo source.</td></tr>
               <tr><td><code>resolution</code></td><td>480p · 720p · 1080p</td><td>Pas de 4K : pour la 4K, <code>seedance_2_0</code> en mode <code>std</code> (15 s max).</td></tr>
               <tr><td><code>aspect_ratio</code></td><td>auto · 21:9 · 16:9 · 4:3 · 1:1 · 3:4 · 9:16</td><td>Ignoré en retouche et prolongation : la sortie suit la source.</td></tr>
-              <tr><td><code>generate_audio</code></td><td>oui (défaut) / non</td><td>Couper le son ne baisse pas le prix : autant le garder.</td></tr>
+              <tr><td><code>generate_audio</code></td><td>oui (défaut) / non</td><td>Couper le son ne baisse pas le prix : autant le garder, sauf en <code>video_edit</code>, où le workflow officiel ad-multiplier rend en muet (<code>generate_audio: false</code>) puis remet le son d'origine de la source.</td></tr>
               <tr><td><code>extension_mode</code></td><td><code>forward</code> · <code>backward</code></td><td>Obligatoire en <code>video_extension</code>, interdit ailleurs.</td></tr>
               <tr><td><code>medias</code> (rôles)</td><td><code>start_image</code>, <code>end_image</code>, <code>image_references</code>, <code>video_references</code>, <code>audio_references</code></td><td>Jusqu'à 50 références ; c'est un plafond, pas un objectif.</td></tr>
             </tbody>
@@ -34,7 +34,7 @@
         <p>Devis réels du connecteur (<code>get_cost</code>) le 28 septembre 2026 ; un clip de 30 s en 720p coûte 210 crédits. Un brouillon en 480p coûte donc quatre fois moins qu'un final en 1080p. Les chiffres des articles de blog sont souvent périmés : demande toujours le devis.</p>
 
         <h3>La structure d'un prompt qui marche</h3>
-        <p>L'ordre officiel des blocs est : <strong>sujet + action + décor + style + caméra + son</strong>. Seuls le sujet et l'action sont obligatoires ; les 20 à 30 premiers mots pèsent le plus. Pour plusieurs plans, Higgsfield recommande une règle visuelle en tête, le découpage plan par plan au milieu, une règle sonore à la fin. Les personnages peuvent rester courts quand les références font le travail.</p>
+        <p>L'ordre officiel des blocs est : <strong>sujet + action + décor + style + caméra + son</strong>. Seuls le sujet et l'action sont obligatoires ; les 20 à 30 premiers mots pèsent le plus. Pour plusieurs plans, Higgsfield recommande une règle visuelle en tête, le découpage plan par plan au milieu, une règle sonore à la fin. La description des personnages peut rester courte quand les références font le travail.</p>
         <div class="code"><span class="label">Gabarit Seedance 2.5 · omni_reference</span><pre>GLOBAL STYLE: 35mm film look, soft natural contrast, warm dusk palette.
 
 CHARACTERS:
@@ -49,13 +49,13 @@ a strand of hair crosses her face. Ends on her calm profile.
 AUDIO: (low ambient strings) &lt;waves against the pier, distant gulls&gt;. No dialogue.</pre></div>
         <ul>
           <li><strong>Une ligne par sujet</strong>, avec ce qu'il faut prendre et ce qu'il faut ignorer (« Do not use the people in this image »). Jamais « @Images 1 to 4 define four characters ».</li>
-          <li><strong>Une planche personnage</strong> laisse fuir son fond gris : ajouter « Do not take the gray backdrop, the panel borders, or the multi-view layout ».</li>
+          <li><strong>Une planche personnage</strong> laisse fuir son fond (blanc avec le workflow <code>character-sheet</code>, gris pour les planches des cours) : ajouter « Do not take the white or gray backdrop, the panel borders, or the multi-view layout ».</li>
           <li><strong>Chaque plan finit sur un état visible</strong> (« Ends with… ») : c'est ce qui rend les enchaînements et les prolongations propres.</li>
-          <li><strong>Son</strong> : <code>( )</code> musique, <code>&lt; &gt;</code> bruitages, <code>{ }</code> dialogue. Pour se passer de musique, écrire « No music. » en texte simple, jamais entre parenthèses (ce serait lu comme une consigne musicale).</li>
-          <li><strong>Dialogue en français</strong> : le chinois est la langue par défaut. Ajouter une ligne <code>Dialogue language: natural Parisian French.</code> puis <code>She says: {…}</code>. Le reste du prompt reste en anglais. Pour du français parlé, Seedance 2.5 plutôt que Kling 3.0, dont l'audio natif ne liste pas le français.</li>
+          <li><strong>Son</strong> : <code>( )</code> musique, <code>&lt; &gt;</code> bruitages, <code>{ }</code> dialogue. Pour se passer de musique, l'usage est d'écrire « No music. » en texte simple plutôt qu'entre parenthèses (convention de la communauté, pas une règle officielle).</li>
+          <li><strong>Dialogue en français</strong> (support annoncé par des guides tiers, pas par Higgsfield : tester d'abord en 480p sur 5 s) : le chinois est la langue par défaut. Ajouter une ligne <code>Dialogue language: natural Parisian French.</code> puis <code>She says: {…}</code>. Le reste du prompt reste en anglais. Pour du français parlé, Seedance 2.5 plutôt que Kling 3.0, dont l'audio natif ne liste pas le français.</li>
           <li><strong>Pas de texte entre guillemets dans les actions</strong> : il serait prononcé.</li>
           <li><strong>Action physique et gros plan d'acteur</strong> dans des générations séparées, assemblées ensuite.</li>
-          <li><strong>Prompt en anglais</strong>, moins de 200 mots environ ; <strong>un seul mouvement de caméra par plan</strong> (empiler travelling, panoramique et bascule est la première cause de tremblement).</li>
+          <li><strong>Prompt en anglais</strong>, court : moins de ~200 tokens (≈ 150 mots) selon le skill officiel Higgsfield, les prompts multi-plans à sections pouvant dépasser ; <strong>un seul mouvement de caméra par plan</strong> (empiler travelling, panoramique et bascule est la première cause de tremblement).</li>
         </ul>
         <p class="sources">Syntaxe des références et des crochets : doctrine Seedance reprise par le skill communautaire OSideMedia ; à vérifier sur tes propres brouillons en 480p.</p>
 
@@ -76,8 +76,8 @@ window daylight, real lived-in bedroom. A woman with curly auburn hair holds the
 bottle from @Image1 next to her cheek, looks into the lens, natural blinks, small smile a
 half-beat late.
 Dialogue language: natural Parisian French, relaxed conversational delivery.
-She says: {Franchement, je pensais pas que ça marcherait aussi vite.}
-She taps the bottle twice. She says: {Trois jours, et regarde ma peau.}
+She says: {Alors, je vous montre comment je l'utilise.}
+She taps the bottle twice. She says: {Deux gouttes le matin, pas plus.}
 Audio: clear voice, quiet room tone, faint street noise. No music.</pre></div>
             <p>Six autres exemples (cinéma, action en plusieurs plans, anime, image de départ, prolongation, POV) et le vocabulaire de caméra complet sont dans le skill <code>seedance-2-5</code>.</p>
           </div>

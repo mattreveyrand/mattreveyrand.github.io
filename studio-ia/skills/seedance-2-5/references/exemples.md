@@ -37,12 +37,15 @@ window daylight, real lived-in bedroom. A woman with curly auburn hair holds the
 bottle from @Image1 next to her cheek, looks into the lens, natural blinks, small smile a
 half-beat late.
 Dialogue language: natural Parisian French, relaxed conversational delivery.
-She says: {Franchement, je pensais pas que ça marcherait aussi vite.}
-She taps the bottle twice. She says: {Trois jours, et regarde ma peau.}
+She says: {Alors, je vous montre comment je l'utilise.}
+She taps the bottle twice. She says: {Deux gouttes le matin, pas plus.}
 Audio: clear voice, quiet room tone, faint street noise. No music.
 ```
 
-Le prompt est en anglais, seules les répliques sont en français. Pour du
+Le prompt est en anglais, seules les répliques sont en français. Un créateur
+généré présente ou démontre ; il ne témoigne pas d'un résultat personnel
+(« trois jours et ma peau a changé ») : le workflow `ugc-review-video` de
+Higgsfield l'interdit, et c'est un faux témoignage. Pour du
 français parlé, rester sur Seedance 2.5 : l'audio natif de Kling 3.0 ne liste
 pas officiellement le français.
 

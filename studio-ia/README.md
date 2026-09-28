@@ -24,13 +24,14 @@ indépendants, chaque volet relu par un vérificateur chargé de le contredire.
 Claude Code (Windows, Git Bash) :
 
 ```bash
+mkdir -p ~/.claude/skills
 cp -r studio-ia/skills/* ~/.claude/skills/
 ```
 
-Puis redémarrer la session : les skills sont lus au démarrage.
+Pas besoin de redémarrer : Claude Code détecte en cours de session les skills ajoutés dans `~/.claude/skills`. Si le dossier `~/.claude/skills` n'existait pas au lancement de la session, taper `/reload-skills`.
 
 claude.ai / Cowork : zipper le dossier d'un skill (le zip contient le dossier,
-qui contient `SKILL.md`), puis *Réglages → Personnaliser (Customize) → Skills*, puis importer le zip.
+qui contient `SKILL.md`), puis *Personnaliser (Customize, dans la barre latérale) → Skills*, bouton « + » → « Create skill » → « Upload a skill », et importer le zip (l'exécution de code doit être active dans Réglages → Capacités).
 
 ## Régénérer la vidéo
 
