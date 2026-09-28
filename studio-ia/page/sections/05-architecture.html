@@ -56,7 +56,7 @@
           <li><strong>rules/ avec <code>paths:</code></strong> : tout ce qui ne concerne qu'un type de fichier (vidéo, web, trading…).</li>
           <li><strong>Skills</strong> : les méthodes longues (plus de 50 lignes) qui ne servent pas à chaque message.</li>
           <li><strong>Sous-agents</strong> : chaque fichier de <code>~/.claude/agents/</code> est listé dans toutes les sessions. Garde en global ceux qui servent partout ; range les autres dans le projet.</li>
-          <li><strong>MCP</strong> : dans le <code>.mcp.json</code> du projet qui s'en sert. Un MCP ne se branche pas à chaud : redémarre la session après l'avoir ajouté.</li>
+          <li><strong>MCP</strong> : dans le <code>.mcp.json</code> du projet qui s'en sert. Attention : un connecteur ajouté sur claude.ai (comme Higgsfield) arrive automatiquement dans toutes tes sessions Claude Code connectées à ton compte ; pour le garder hors d'un projet, désactive-le dans <code>/mcp</code> (le choix est mémorisé par projet) plutôt que de le redéclarer dans <code>.mcp.json</code>. Un MCP ne se branche pas à chaud : redémarre la session après l'avoir ajouté.</li>
           <li><strong>Secrets</strong> : jamais dans un fichier versionné. Variables d'environnement, et <code>Read(./.env)</code> en <code>deny</code>.</li>
         </ul>
       </section>

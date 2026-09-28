@@ -22,9 +22,9 @@
         </div>
 
         <h3>Le cache de prompt</h3>
-        <p>Quand le début du contexte est identique d'un tour à l'autre, il est lu depuis le cache, au moins dix fois moins cher que le prix normal. C'est automatique. Le cache dure une heure sur un abonnement Pro ou Max, cinq minutes quand on consomme des crédits d'usage (réglable avec <code>promptCacheTtl</code>). Ce qui le fait repartir de zéro : changer de modèle en cours de session, brancher ou débrancher un serveur MCP ou un plugin, compacter, et laisser la session inactive plus longtemps que sa durée.</p>
-        <p>Conséquence pratique : choisis le modèle et l'effort (<code>low</code>, <code>medium</code>, <code>high</code>, <code>xhigh</code>, <code>max</code>) au début de la session et n'y touche plus. Si tu as besoin d'un autre modèle pour une sous-tâche, confie-la à un sous-agent.</p>
-        <p>La fenêtre des modèles actuels (Opus 5.5, Sonnet 5, Fable 5.1, Haiku 4.5) fait un million de tokens. Ce n'est pas une raison pour la remplir : plus elle est pleine, plus chaque message coûte, et la précision baisse sur les très longues sessions.</p>
+        <p>Quand le début du contexte est identique d'un tour à l'autre, il est lu depuis le cache, au moins dix fois moins cher que le prix normal. C'est automatique. Sur un abonnement Claude, le cache de la conversation principale dure une heure tant que tu restes dans les limites du forfait ; celui des sous-agents dure cinq minutes, et tout passe à cinq minutes dès que tu consommes des crédits d'usage (réglable avec <code>promptCacheTtl</code> et <code>subagentPromptCacheTtl</code>, valeurs <code>5m</code> ou <code>1h</code>). Ce qui le fait repartir de zéro : changer de modèle en cours de session, changer l'effort (sauf sur Opus 5.5 et Fable 5.1, où le cache est conservé), compacter (l'historique est remplacé par son résumé), et laisser la session inactive plus longtemps que sa durée. Brancher un serveur MCP ou activer un plugin ne le casse pas dans le cas par défaut (recherche d'outils active) : leurs outils sont simplement ajoutés à la suite.</p>
+        <p>Conséquence pratique : choisis le modèle au début de la session et n'y touche plus ; si une sous-tâche demande un autre modèle, confie-la à un sous-agent. L'effort (<code>low</code>, <code>medium</code>, <code>high</code>, <code>xhigh</code>, <code>max</code>) peut bouger en cours de route sur Opus 5.5 et Fable 5.1 sans casser le cache.</p>
+        <p>La fenêtre d'Opus 5.5, de Sonnet 5 et de Fable 5.1 fait un million de tokens (200 000 pour Haiku 4.5). Ce n'est pas une raison pour la remplir : plus elle est pleine, plus chaque message coûte, et la précision baisse sur les très longues sessions.</p>
 
         <h3>Quel modèle, quand</h3>
         <div class="tbl">
@@ -34,7 +34,7 @@
               <tr><td><strong>Opus 5.5</strong></td><td>Le défaut recommandé par Anthropic depuis sa sortie le 22 septembre 2026 : direction créative, plans, code. Moins cher et plus rapide qu'Opus 5.</td></tr>
               <tr><td><strong>Sonnet 5</strong></td><td>Travail en volume et vérifiable : résumés, tri, variantes de prompts.</td></tr>
               <tr><td><strong>Haiku 4.5</strong></td><td>Sous-agents mécaniques : lire des logs, renommer, extraire.</td></tr>
-              <tr><td><strong>Fable 5.1</strong></td><td>Les problèmes de raisonnement les plus durs, quand Opus 5.5 bloque.</td></tr>
+              <tr><td><strong>Fable 5.1</strong></td><td>Les problèmes de raisonnement les plus durs et les très longues tâches autonomes, quand Opus 5.5 bloque. Plus lent et 2,5 fois plus cher qu'Opus 5.5 ; selon ton forfait, il peut être facturé en crédits d'usage (le sélecteur <code>/model</code> l'indique).</td></tr>
             </tbody>
           </table>
         </div>
@@ -45,12 +45,12 @@
             <thead><tr><th scope="col">Commande</th><th scope="col">Effet</th><th scope="col">Quand</th></tr></thead>
             <tbody>
               <tr><td><code>/context</code></td><td>Montre ce qui remplit la fenêtre, couche par couche.</td><td>Dès qu'une session paraît lente ou chère.</td></tr>
-              <tr><td><code>/usage</code></td><td>Consommation de l'abonnement et coût estimé de la session.</td><td>Après chaque phase de travail.</td></tr>
+              <tr><td><code>/usage</code></td><td>Consommation de l'abonnement et coût estimé, par skill, plugin et MCP (historique de Claude Code sur cette machine seulement).</td><td>Après chaque phase de travail.</td></tr>
               <tr><td><code>/clear</code></td><td>Repart d'une conversation vide (CLAUDE.md rechargé).</td><td>Entre deux tâches sans rapport.</td></tr>
               <tr><td><code>/compact garde X</code></td><td>Résume la conversation en gardant ce que tu nommes.</td><td>À une pause naturelle d'une même tâche.</td></tr>
-              <tr><td><code>/rewind</code> ou <kbd>Esc</kbd> <kbd>Esc</kbd></td><td>Revient à un point précédent (code et conversation).</td><td>Quand une piste part dans le mur.</td></tr>
+              <tr><td><code>/rewind</code> ou <kbd>Esc</kbd> <kbd>Esc</kbd></td><td>Revient à un point précédent (conversation et fichiers modifiés par Claude ; les changements faits par des commandes Bash, comme un rendu ffmpeg ou un mv, ne sont pas annulés).</td><td>Quand une piste part dans le mur.</td></tr>
               <tr><td><code>/resume</code></td><td>Reprend une session précédente.</td><td>Pour continuer un chantier le lendemain.</td></tr>
-              <tr><td><code>/model</code>, <code>/effort</code></td><td>Change le modèle ou l'effort de réflexion.</td><td>Au début seulement (sinon le cache repart).</td></tr>
+              <tr><td><code>/model</code>, <code>/effort</code></td><td>Change le modèle ou l'effort de réflexion.</td><td>Le modèle : au début seulement (sinon le cache repart). L'effort : ajustable en cours de route sur Opus 5.5 et Fable 5.1 sans perdre le cache ; au début seulement sur les autres modèles.</td></tr>
             </tbody>
           </table>
         </div>

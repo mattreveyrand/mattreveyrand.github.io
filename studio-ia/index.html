@@ -267,12 +267,12 @@ footer.end { border-top: 1px solid var(--line); padding-block: 28px 56px; color:
           <div class="panel g">
             <span class="tag">desktop · web · mobile</span>
             <h4>Cowork</h4>
-            <p><strong>Pour :</strong> déléguer un travail de bureau long, sans code. Les tâches tournent sur les serveurs d'Anthropic : tu peux fermer l'ordinateur et suivre depuis le téléphone.</p>
+            <p><strong>Pour :</strong> déléguer un travail de bureau long, sans code. Les tâches tournent sur les serveurs d'Anthropic (en bêta) et se suivent depuis le téléphone. Mais si la tâche touche des fichiers de ton ordinateur (tes rushes, par exemple), laisse l'app desktop ouverte et l'ordinateur allumé pour que Claude y accède.</p>
             <ul>
               <li>Trier et renommer des rushes, remplir un tableur de plans, préparer un rapport ou une présentation.</li>
               <li>Plugins par métier et skills partagés avec l'app.</li>
               <li>Tâches planifiées et récurrentes.</li>
-              <li>Deux modes : manuel (tu valides chaque action) ou automatique (avec garde-fous).</li>
+              <li>Trois modes : manuel (tu valides chaque action), automatique (Claude vérifie chaque action et bloque ce qui lui paraît risqué) ou « Skip » (aucune vérification, à réserver aux tâches où tu fais entièrement confiance aux fichiers et connecteurs en jeu).</li>
             </ul>
           </div>
         </div>
@@ -321,9 +321,9 @@ footer.end { border-top: 1px solid var(--line); padding-block: 28px 56px; color:
         </div>
 
         <h3>Le cache de prompt</h3>
-        <p>Quand le début du contexte est identique d'un tour à l'autre, il est lu depuis le cache, au moins dix fois moins cher que le prix normal. C'est automatique. Le cache dure une heure sur un abonnement Pro ou Max, cinq minutes quand on consomme des crédits d'usage (réglable avec <code>promptCacheTtl</code>). Ce qui le fait repartir de zéro : changer de modèle en cours de session, brancher ou débrancher un serveur MCP ou un plugin, compacter, et laisser la session inactive plus longtemps que sa durée.</p>
-        <p>Conséquence pratique : choisis le modèle et l'effort (<code>low</code>, <code>medium</code>, <code>high</code>, <code>xhigh</code>, <code>max</code>) au début de la session et n'y touche plus. Si tu as besoin d'un autre modèle pour une sous-tâche, confie-la à un sous-agent.</p>
-        <p>La fenêtre des modèles actuels (Opus 5.5, Sonnet 5, Fable 5.1, Haiku 4.5) fait un million de tokens. Ce n'est pas une raison pour la remplir : plus elle est pleine, plus chaque message coûte, et la précision baisse sur les très longues sessions.</p>
+        <p>Quand le début du contexte est identique d'un tour à l'autre, il est lu depuis le cache, au moins dix fois moins cher que le prix normal. C'est automatique. Sur un abonnement Claude, le cache de la conversation principale dure une heure tant que tu restes dans les limites du forfait ; celui des sous-agents dure cinq minutes, et tout passe à cinq minutes dès que tu consommes des crédits d'usage (réglable avec <code>promptCacheTtl</code> et <code>subagentPromptCacheTtl</code>, valeurs <code>5m</code> ou <code>1h</code>). Ce qui le fait repartir de zéro : changer de modèle en cours de session, changer l'effort (sauf sur Opus 5.5 et Fable 5.1, où le cache est conservé), compacter (l'historique est remplacé par son résumé), et laisser la session inactive plus longtemps que sa durée. Brancher un serveur MCP ou activer un plugin ne le casse pas dans le cas par défaut (recherche d'outils active) : leurs outils sont simplement ajoutés à la suite.</p>
+        <p>Conséquence pratique : choisis le modèle au début de la session et n'y touche plus ; si une sous-tâche demande un autre modèle, confie-la à un sous-agent. L'effort (<code>low</code>, <code>medium</code>, <code>high</code>, <code>xhigh</code>, <code>max</code>) peut bouger en cours de route sur Opus 5.5 et Fable 5.1 sans casser le cache.</p>
+        <p>La fenêtre d'Opus 5.5, de Sonnet 5 et de Fable 5.1 fait un million de tokens (200 000 pour Haiku 4.5). Ce n'est pas une raison pour la remplir : plus elle est pleine, plus chaque message coûte, et la précision baisse sur les très longues sessions.</p>
 
         <h3>Quel modèle, quand</h3>
         <div class="tbl">
@@ -333,7 +333,7 @@ footer.end { border-top: 1px solid var(--line); padding-block: 28px 56px; color:
               <tr><td><strong>Opus 5.5</strong></td><td>Le défaut recommandé par Anthropic depuis sa sortie le 22 septembre 2026 : direction créative, plans, code. Moins cher et plus rapide qu'Opus 5.</td></tr>
               <tr><td><strong>Sonnet 5</strong></td><td>Travail en volume et vérifiable : résumés, tri, variantes de prompts.</td></tr>
               <tr><td><strong>Haiku 4.5</strong></td><td>Sous-agents mécaniques : lire des logs, renommer, extraire.</td></tr>
-              <tr><td><strong>Fable 5.1</strong></td><td>Les problèmes de raisonnement les plus durs, quand Opus 5.5 bloque.</td></tr>
+              <tr><td><strong>Fable 5.1</strong></td><td>Les problèmes de raisonnement les plus durs et les très longues tâches autonomes, quand Opus 5.5 bloque. Plus lent et 2,5 fois plus cher qu'Opus 5.5 ; selon ton forfait, il peut être facturé en crédits d'usage (le sélecteur <code>/model</code> l'indique).</td></tr>
             </tbody>
           </table>
         </div>
@@ -344,12 +344,12 @@ footer.end { border-top: 1px solid var(--line); padding-block: 28px 56px; color:
             <thead><tr><th scope="col">Commande</th><th scope="col">Effet</th><th scope="col">Quand</th></tr></thead>
             <tbody>
               <tr><td><code>/context</code></td><td>Montre ce qui remplit la fenêtre, couche par couche.</td><td>Dès qu'une session paraît lente ou chère.</td></tr>
-              <tr><td><code>/usage</code></td><td>Consommation de l'abonnement et coût estimé de la session.</td><td>Après chaque phase de travail.</td></tr>
+              <tr><td><code>/usage</code></td><td>Consommation de l'abonnement et coût estimé, par skill, plugin et MCP (historique de Claude Code sur cette machine seulement).</td><td>Après chaque phase de travail.</td></tr>
               <tr><td><code>/clear</code></td><td>Repart d'une conversation vide (CLAUDE.md rechargé).</td><td>Entre deux tâches sans rapport.</td></tr>
               <tr><td><code>/compact garde X</code></td><td>Résume la conversation en gardant ce que tu nommes.</td><td>À une pause naturelle d'une même tâche.</td></tr>
-              <tr><td><code>/rewind</code> ou <kbd>Esc</kbd> <kbd>Esc</kbd></td><td>Revient à un point précédent (code et conversation).</td><td>Quand une piste part dans le mur.</td></tr>
+              <tr><td><code>/rewind</code> ou <kbd>Esc</kbd> <kbd>Esc</kbd></td><td>Revient à un point précédent (conversation et fichiers modifiés par Claude ; les changements faits par des commandes Bash, comme un rendu ffmpeg ou un mv, ne sont pas annulés).</td><td>Quand une piste part dans le mur.</td></tr>
               <tr><td><code>/resume</code></td><td>Reprend une session précédente.</td><td>Pour continuer un chantier le lendemain.</td></tr>
-              <tr><td><code>/model</code>, <code>/effort</code></td><td>Change le modèle ou l'effort de réflexion.</td><td>Au début seulement (sinon le cache repart).</td></tr>
+              <tr><td><code>/model</code>, <code>/effort</code></td><td>Change le modèle ou l'effort de réflexion.</td><td>Le modèle : au début seulement (sinon le cache repart). L'effort : ajustable en cours de route sur Opus 5.5 et Fable 5.1 sans perdre le cache ; au début seulement sur les autres modèles.</td></tr>
             </tbody>
           </table>
         </div>
@@ -361,7 +361,7 @@ footer.end { border-top: 1px solid var(--line); padding-block: 28px 56px; color:
           <button type="button" class="seek" data-seek="skills"></button>
           <h2>Skills : le savoir-faire rangé en tiroirs</h2>
         </header>
-        <p class="intro">Un skill est un dossier qui contient un fichier <code>SKILL.md</code> : un nom, une description, puis la méthode. Claude ne voit au départ que le nom et la description. Il lit la méthode quand ta demande correspond, et n'ouvre les fichiers annexes que s'il en a besoin. Cent skills bien décrits coûtent donc peu ; un seul skill mal découpé peut coûter cher à chaque appel.</p>
+        <p class="intro">Un skill est un dossier qui contient un fichier <code>SKILL.md</code> : un nom, une description, puis la méthode. Claude ne voit au départ que le nom et la description. Il lit la méthode quand ta demande correspond, et n'ouvre les fichiers annexes que s'il en a besoin. Des dizaines de skills bien décrits coûtent donc peu, mais pas rien : chaque description est relue à chaque tour, et au-delà d'un budget (1 % de la fenêtre) Claude Code coupe les descriptions des skills les moins utilisés, qui ne se déclenchent plus. <code>/skill-doctor</code> montre ce que chacun coûte. Un seul skill mal découpé peut coûter cher à chaque appel.</p>
 
         <div class="grid">
           <div class="panel m">
@@ -417,7 +417,7 @@ description: >
               <tr><td>Claude Code, personnel</td><td><code>~/.claude/skills/&lt;nom&gt;/SKILL.md</code></td><td>Tous tes projets</td></tr>
               <tr><td>Claude Code, projet</td><td><code>.claude/skills/&lt;nom&gt;/SKILL.md</code></td><td>Ce dépôt (partagé via Git)</td></tr>
               <tr><td>Claude Code, plugin</td><td><code>/plugin install &lt;nom&gt;@&lt;marketplace&gt;</code></td><td>Selon l'activation du plugin</td></tr>
-              <tr><td>claude.ai et Cowork</td><td>Réglages → Personnaliser (<em>Customize</em>) → Skills : importer un .zip du dossier</td><td>Ton compte (l'exécution de code doit être active)</td></tr>
+              <tr><td>claude.ai et Cowork</td><td>Personnaliser (<em>Customize</em>, dans la barre latérale) → Skills, puis « + » → « Upload a skill » : importer un .zip du dossier</td><td>Ton compte : claude.ai, Cowork, et aussi Claude Code quand tu es connecté avec ce compte (synchronisation automatique) ; n'installe donc pas le même skill aux deux endroits. L'exécution de code doit être active (Réglages → Capacités → « Exécution de code et création de fichiers »).</td></tr>
             </tbody>
           </table>
         </div>
@@ -430,7 +430,7 @@ description: >
           <button type="button" class="seek" data-seek="artefacts"></button>
           <h2>Artefacts : des pages que Claude publie pour toi</h2>
         </header>
-        <p class="intro">Un artefact est une page web que Claude écrit et héberge sur claude.ai. Elle est privée par défaut ; tu obtiens un lien que tu choisis de partager. Quand Claude la corrige, elle est republiée au même lien. Cette page-ci, avec sa vidéo, est un artefact.</p>
+        <p class="intro">Un artefact est une page web que Claude écrit et héberge sur claude.ai. Elle est privée par défaut ; tu obtiens un lien que tu choisis de partager. Sur Pro et Max, partager veut dire lien public ; une page qui appelle un connecteur (Higgsfield, Drive…) ne peut pas être publique et reste donc privée. Quand Claude la corrige, elle est republiée au même lien. Cette page-ci, avec sa vidéo, est un artefact.</p>
 
         <div class="grid">
           <div class="panel m">
@@ -446,7 +446,7 @@ description: >
             <h4>Ce qu'elle ne fait pas</h4>
             <ul>
               <li>Charger des scripts hors des CDN autorisés, intégrer YouTube ou un autre site en iframe.</li>
-              <li>Lancer un téléchargement ou une impression depuis la page.</li>
+              <li>Lancer d'elle-même un téléchargement ou une impression (pour proposer un bouton « Télécharger », Claude doit déclarer la capacité de téléchargement, disponible selon ton compte).</li>
               <li>Garder des données fiables dans le navigateur du visiteur : pour ça, il faut une capacité de stockage partagé.</li>
             </ul>
           </div>
@@ -459,7 +459,7 @@ description: >
           <li><strong>Proposition client</strong> : une page propre avec la vidéo de démonstration et le devis.</li>
           <li><strong>Bibliothèque de prompts</strong> : tes meilleurs prompts Seedance filtrables par type de plan.</li>
         </ul>
-        <p>Il suffit de demander : « fais-en un artefact que je peux partager ». Dans Claude Code, <code>/artifacts</code> liste ceux que tu possèdes.</p>
+        <p>Il suffit de demander : « fais-en un artefact que je peux partager ». Dans Claude Code, <code>/artifacts</code> liste ceux que tu possèdes et ceux qu'on t'a partagés, et permet d'en rattacher un à la session pour le modifier au même lien.</p>
       </section>
 
       <section class="chap" id="architecture" data-short="Architecture">
@@ -520,7 +520,7 @@ description: >
           <li><strong>rules/ avec <code>paths:</code></strong> : tout ce qui ne concerne qu'un type de fichier (vidéo, web, trading…).</li>
           <li><strong>Skills</strong> : les méthodes longues (plus de 50 lignes) qui ne servent pas à chaque message.</li>
           <li><strong>Sous-agents</strong> : chaque fichier de <code>~/.claude/agents/</code> est listé dans toutes les sessions. Garde en global ceux qui servent partout ; range les autres dans le projet.</li>
-          <li><strong>MCP</strong> : dans le <code>.mcp.json</code> du projet qui s'en sert. Un MCP ne se branche pas à chaud : redémarre la session après l'avoir ajouté.</li>
+          <li><strong>MCP</strong> : dans le <code>.mcp.json</code> du projet qui s'en sert. Attention : un connecteur ajouté sur claude.ai (comme Higgsfield) arrive automatiquement dans toutes tes sessions Claude Code connectées à ton compte ; pour le garder hors d'un projet, désactive-le dans <code>/mcp</code> (le choix est mémorisé par projet) plutôt que de le redéclarer dans <code>.mcp.json</code>. Un MCP ne se branche pas à chaud : redémarre la session après l'avoir ajouté.</li>
           <li><strong>Secrets</strong> : jamais dans un fichier versionné. Variables d'environnement, et <code>Read(./.env)</code> en <code>deny</code>.</li>
         </ul>
       </section>
@@ -540,7 +540,7 @@ description: >
           <li><div><strong>Un CLAUDE.md court.</strong> Moins de 200 lignes, sans ce que Claude peut deviner en lisant le dossier. Le conditionnel va dans <code>rules/</code> (avec <code>paths:</code>) et les méthodes longues dans des skills.</div></li>
           <li><div><strong>CLI d'abord, skill ensuite, MCP en dernier.</strong> Une commande appelée en Bash ne coûte rien tant qu'elle ne sert pas. Un skill coûte une ligne. Un serveur MCP ajoute ses outils à chaque session où il est branché : garde-le dans le projet qui s'en sert.</div></li>
           <li><div><strong>Déléguer le bruit à un sous-agent.</strong> Lire 40 fichiers, analyser un log, fouiller un dépôt : un sous-agent le fait dans son propre contexte et ne renvoie que le résumé. Pour les tâches mécaniques, donne-lui un modèle plus léger (<code>model: haiku</code> dans sa définition). Attention : un sous-agent consomme ses propres tokens ; c'est rentable pour isoler du volume, pas pour une question simple.</div></li>
-          <li><div><strong>Modèle et effort fixés au départ.</strong> Changer de modèle en cours de route fait repartir le cache. Un effort de réflexion bas ou moyen suffit pour appliquer une méthode connue ; garde l'effort élevé pour les vrais problèmes.</div></li>
+          <li><div><strong>Le bon modèle au bon endroit.</strong> Changer de modèle en cours de route fait repartir le cache : choisis-le au départ. L'alias <code>opusplan</code> réfléchit avec Opus en mode plan et exécute avec Sonnet. <code>CLAUDE_CODE_SUBAGENT_MODEL=haiku</code> fait tourner tous les sous-agents sur Haiku. Un effort bas ou moyen suffit pour appliquer une méthode connue ; garde l'effort élevé pour les vrais problèmes.</div></li>
           <li><div><strong>Le plan avant l'exécution.</strong> <kbd>Shift</kbd>+<kbd>Tab</kbd> jusqu'au mode plan : Claude explore et propose sans rien modifier. Tu corriges le plan (écrit dans un fichier), puis il exécute. Refaire un travail parti dans la mauvaise direction coûte bien plus cher.</div></li>
           <li><div><strong>Filtrer les sorties bavardes.</strong> Une commande qui crache 5 000 lignes les met toutes dans le contexte. Demande des sorties courtes (<code>--quiet</code>, <code>| tail -20</code>, <code>--json | jq</code>), ou installe un filtre automatique (voir le pack plus bas).</div></li>
           <li><div><strong>Des images à la bonne taille.</strong> Une image coûte environ <em>(largeur ÷ 28) × (hauteur ÷ 28)</em> tokens : une référence en 1000 × 1000 pèse déjà ~1 300 tokens. Réduis les captures et les planches avant de les donner à Claude ; garde la haute définition pour Higgsfield.</div></li>
@@ -548,7 +548,7 @@ description: >
 
         <div class="callout info">
           <strong>Le bon ordre de grandeur</strong>
-          Sur une session qui dure, le poste principal n'est presque jamais CLAUDE.md : c'est l'historique et les sorties d'outils. <code>/clear</code>, <code>/compact</code> et les sous-agents pèsent plus que toutes les autres astuces réunies.
+          Sur une session qui dure, le poste principal n'est presque jamais CLAUDE.md : c'est l'historique et les sorties d'outils. <code>/clear</code>, <code>/compact</code> et les sous-agents pèsent plus que toutes les autres astuces réunies. Attention aussi aux dépenses qui tournent sans toi : tâches <code>/loop</code>, routines planifiées, équipes d'agents ; <code>/usage</code> les montre.
         </div>
       </section>
 
@@ -596,14 +596,14 @@ ce qui a échoué et pourquoi, et la prochaine étape. Dix lignes maximum.</pre>
           <span class="plan"><i style="background:var(--s-green)"></i>Hors vidéo</span>
           <h2>Le pack : ce qu'il faut installer, et ce qu'il faut éviter</h2>
         </header>
-        <p class="intro">Recherche du 28 septembre 2026 : dépôts vérifiés un par un, tests indépendants quand ils existent. Les chiffres annoncés par les auteurs sont souvent 3 à 8 fois supérieurs à ce que mesurent les tests indépendants. Règle : installer un outil à la fois, et regarder <code>/usage</code> pendant une semaine avant d'ajouter le suivant.</p>
+        <p class="intro">Recherche du 28 septembre 2026 : dépôts vérifiés un par un, tests indépendants quand ils existent. Les chiffres annoncés par les auteurs sont souvent 2 à 8 fois supérieurs à ce que mesurent les tests indépendants, et parfois de signe contraire (RTK). Règle : installer un outil à la fois, et regarder <code>/usage</code> pendant une semaine avant d'ajouter le suivant. Sous Windows, vérifier d'abord que <code>node</code> (Ponytail, caveman, Context7) et <code>python</code> (planning-with-files, dont les hooks sont lents sans lui) répondent dans Git Bash.</p>
 
         <h3>Déjà là, gratuit, à utiliser d'abord</h3>
         <div class="tbl">
           <table>
             <thead><tr><th scope="col">Réglage ou commande</th><th scope="col">Ce que ça apporte</th></tr></thead>
             <tbody>
-              <tr><td><code>/usage</code></td><td>Sur Pro et Max : part de la consommation attribuée à chaque skill, plugin, sous-agent et serveur MCP. C'est l'outil pour juger tout le reste.</td></tr>
+              <tr><td><code>/usage</code></td><td>Sur Pro et Max : part de la consommation attribuée à chaque skill, plugin, sous-agent et serveur MCP. C'est l'outil pour juger tout le reste ; il ne compte que l'historique de Claude Code sur cette machine (ni claude.ai, ni tes autres appareils).</td></tr>
               <tr><td><code>/context</code>, <code>/doctor</code></td><td>Ce qui remplit la fenêtre ; coût de la liste des skills et plus gros contributeurs.</td></tr>
               <tr><td>Mémoire auto</td><td>Active par défaut. Index <code>MEMORY.md</code> dont les 200 premières lignes (25 Ko max) sont chargées à chaque session ; fiches thématiques lues à la demande.</td></tr>
               <tr><td>Budget de la liste des skills</td><td>Noms et descriptions de tous les skills tiennent dans environ 1 % de la fenêtre. Au-delà, des descriptions sont retirées et les skills se déclenchent mal. Pour tes skills personnels ou de projet rarement utiles : mode « nom seul » (<code>skillOverrides</code>) ou <code>disable-model-invocation: true</code> pour ceux que tu appelles toujours à la main. Les skills livrés par un plugin ne sont pas concernés : on les gère avec <code>/plugin</code> (désactiver le plugin). <code>/skill-doctor</code> liste ceux qui ne servent jamais.</td></tr>
@@ -628,7 +628,7 @@ ce qui a échoué et pourquoi, et la prochaine étape. Dix lignes maximum.</pre>
               <tr>
                 <td><strong>planning-with-files</strong><br><span class="sources">OthmanAdi</span></td>
                 <td>Plan, découvertes et progression écrits sur disque (<code>task_plan.md</code>, <code>findings.md</code>, <code>progress.md</code>) et réinjectés à chaque tour.</td>
-                <td>Rend <code>/clear</code> sans risque, et <code>/clear</code> est le levier le moins cher qui existe. Gains mesurés par l'auteur seulement.</td>
+                <td>Rend <code>/clear</code> sans risque, et <code>/clear</code> est le levier le moins cher qui existe. Gains mesurés par l'auteur seulement. Dans un dépôt où Superpowers écrit déjà son plan, n'en garder qu'un des deux pour éviter deux plans concurrents.</td>
                 <td><code>/plugin marketplace add OthmanAdi/planning-with-files</code><br><code>/plugin install planning-with-files@planning-with-files</code></td>
                 <td><span class="pill must">Indispensable</span></td>
               </tr>
@@ -636,7 +636,7 @@ ce qui a échoué et pourquoi, et la prochaine étape. Dix lignes maximum.</pre>
                 <td><strong>ccstatusline</strong><br><span class="sources">sirmalloc</span></td>
                 <td>Barre d'état : modèle, % de contexte, git, consommation. Zéro token.</td>
                 <td>Tu vois quand faire <code>/clear</code>.</td>
-                <td><code>npx -y ccstatusline@latest</code> puis « Pinned global install »</td>
+                <td><code>npx -y ccstatusline@latest</code> puis « Pinned global install »<br>Une seule barre d'état possible : refuse celles que proposent ensuite Ponytail, context-mode ou l'installateur complet de caveman.</td>
                 <td><span class="pill must">Indispensable</span></td>
               </tr>
               <tr>
@@ -649,14 +649,14 @@ ce qui a échoué et pourquoi, et la prochaine étape. Dix lignes maximum.</pre>
               <tr>
                 <td><strong>Superpowers</strong><br><span class="sources">obra · marketplace officielle</span></td>
                 <td>Méthode complète pour le code : brainstorming → plan → tests d'abord → revue par sous-agent.</td>
-                <td>Plus de qualité ; plus de tokens sur les petites tâches (choisir <em>executing-plans</em> pour le petit travail).</td>
-                <td><code>/plugin install superpowers@claude-plugins-official</code></td>
+                <td>Aucun test indépendant de qualité publié ; mesures tierces mitigées sur les tokens, plus chères sur les petites tâches. Pour le petit travail, choisir <em>executing-plans</em> : exécution dans la session et une seule revue à la fin, la voie la moins chère selon son README.</td>
+                <td><code>/plugin install superpowers@claude-plugins-official</code><br>Puis <code>SUPERPOWERS_DISABLE_TELEMETRY=1</code> pour couper le logo chargé depuis primeradiant.com.</td>
                 <td><span class="pill must">Pour le code</span></td>
               </tr>
               <tr>
                 <td><strong>Ponytail</strong><br><span class="sources">DietrichGebert</span></td>
                 <td>Échelle « le moins de code possible » avant d'écrire : réutiliser, bibliothèque standard, une ligne.</td>
-                <td>Seul économiseur avec un gain indépendant significatif : environ −10 % de coût et −15 % de code sur la charge testée (JetBrains, 80 paires ; l'intervalle de confiance frôle zéro).</td>
+                <td>Seul économiseur avec un gain indépendant significatif : environ −10 % de coût et −15 % de code sur la charge testée (JetBrains, 80 paires, p = 0,004, qualité inchangée ; le gain se concentre sur les grosses tâches).</td>
                 <td><code>/plugin marketplace add DietrichGebert/ponytail</code><br><code>/plugin install ponytail@ponytail</code></td>
                 <td><span class="pill must">Pour le code</span></td>
               </tr>
@@ -675,10 +675,17 @@ ce qui a échoué et pourquoi, et la prochaine étape. Dix lignes maximum.</pre>
                 <td><span class="pill nice">Si tu codes</span></td>
               </tr>
               <tr>
+                <td><strong>typescript-lsp / pyright-lsp</strong><br><span class="sources">officiel Anthropic</span></td>
+                <td>Navigation par symbole (définition, références) et erreurs de type signalées après chaque modification.</td>
+                <td>Recommandé par la doc officielle des coûts : un appel remplace un grep suivi de plusieurs lectures de fichiers.</td>
+                <td><code>/plugin install typescript-lsp@claude-plugins-official</code> + <code>npm install -g typescript-language-server typescript</code><br><code>/plugin install pyright-lsp@claude-plugins-official</code> + <code>npm install -g pyright</code></td>
+                <td><span class="pill nice">Sites en TS/JS, scripts Python</span></td>
+              </tr>
+              <tr>
                 <td><strong>caveman</strong> (skill seul, mode lite)<br><span class="sources">JuliusBrussee</span></td>
                 <td>Réponses télégraphiques ; <code>/caveman-compress CLAUDE.md</code> raccourcit un fichier mémoire d'environ 46 %.</td>
-                <td>Annonce 65 % ; mesuré −8,5 % de tokens de sortie (JetBrains). Ses règles ajoutent ~1 000 tokens par appel.</td>
-                <td><code>claude plugin marketplace add JuliusBrussee/caveman</code><br><code>claude plugin install caveman@caveman</code></td>
+                <td>Annonçait 65 % ; JetBrains mesure −8,5 % de tokens de sortie, qualité inchangée ; le benchmark agentique de Ponytail le trouve à +7 % de tokens. Ses règles ajoutent ~1 000 tokens par appel.</td>
+                <td><code>claude plugin marketplace add JuliusBrussee/caveman</code><br><code>claude plugin install caveman@caveman</code><br>Le plugin s'allume seul en mode <em>full</em> à chaque session : crée <code>%APPDATA%\caveman\config.json</code> (Windows ; <code>~/.config/caveman/config.json</code> ailleurs) contenant <code>{"defaultMode":"off"}</code>, puis un <code>.caveman.json</code> contenant <code>{"defaultMode":"lite"}</code> à la racine de chaque dépôt de code.</td>
                 <td><span class="pill nice">Pour le code, jamais pour l'écriture</span></td>
               </tr>
               <tr>
@@ -692,16 +699,17 @@ ce qui a échoué et pourquoi, et la prochaine étape. Dix lignes maximum.</pre>
           </table>
         </div>
         <p>Un seul cadre de travail : Superpowers <em>ou</em> compound-engineering <em>ou</em> GSD Core. Les empiler multiplie les hooks, les skills et les tokens.</p>
+        <p>Les plugins « Pour le code » (Superpowers, Ponytail, caveman) se chargent sinon dans toutes tes sessions, vidéo comprises : Ponytail s'active en mode <em>full</em> à chaque session et s'injecte aussi dans chaque sous-agent. Dans une session, <code>/plugin install</code> ouvre un panneau qui demande la portée : lance-le depuis chaque dépôt de code et choisis « Install for you, in this repo only » (portée locale).</p>
 
         <h3>À éviter</h3>
         <div class="tbl">
           <table>
             <thead><tr><th scope="col">Outil</th><th scope="col">Pourquoi</th><th scope="col">Verdict</th></tr></thead>
             <tbody>
-              <tr><td><strong>claude-mem</strong></td><td>Son « observateur » en arrière-plan fait tourner Claude sur chaque transcript : un ticket ouvert en septembre 2026 mesure 43 % du trafic de tokens consommé par lui seul (7,9 M en 4 h). La mémoire auto intégrée couvre l'essentiel.</td><td><span class="pill skip">Éviter</span></td></tr>
-              <tr><td><strong>RTK</strong> et hooks de compression Bash</td><td>Annonce 60 à 90 % ; mesuré +7,6 % de coût à effort bas (JetBrains). Les outils Read, Grep et Glob de Claude Code passent à côté du hook. À garder seulement si <code>/usage</code> montre un gain sur ton travail.</td><td><span class="pill warn">Mesurer d'abord</span></td></tr>
-              <tr><td>Routeurs « Claude gratuit » (OmniRoute, 9router, free-claude-code, sub2api…)</td><td>Les conditions d'Anthropic interdisent de faire passer des identifiants Pro ou Max par une application tierce. Risque de blocage du compte.</td><td><span class="pill bad">Interdit</span></td></tr>
-              <tr><td>Méga-paquets (ECC, gstack)</td><td>Des centaines de skills et de commandes : la liste déborde du budget de 1 % et les déclenchements se dégradent. Prendre un skill à la fois si besoin.</td><td><span class="pill skip">Éviter</span></td></tr>
+              <tr><td><strong>claude-mem</strong></td><td>Son « observateur » en arrière-plan résume chaque appel d'outil avec un LLM : sur ton forfait Anthropic, ou sur le service hébergé de claude-mem que l'installateur pousse à activer (tes transcripts partent chez eux ; après 30 jours d'essai, retour sur ton forfait sans abonnement). Un ticket ouvert le 13 septembre 2026 (#4070) mesure l'observateur à 43 % du trafic de tokens observé (7,9 M en 4 h, surtout de l'écriture de cache). La mémoire auto intégrée couvre l'essentiel.</td><td><span class="pill skip">Éviter</span></td></tr>
+              <tr><td><strong>RTK</strong> et hooks de compression Bash</td><td>Réduit « jusqu'à 90 % » de la sortie Bash lue par l'agent, ce qui n'est pas 90 % de la facture, précise son propre README ; mesuré +7,6 % de coût médian par tâche à effort bas et neutre (+0,1 %) à effort haut (JetBrains). Les outils Read, Grep et Glob de Claude Code passent à côté du hook. À garder seulement si <code>/usage</code> montre un gain sur ton travail.</td><td><span class="pill warn">Mesurer d'abord</span></td></tr>
+              <tr><td>Routeurs d'abonnement (OmniRoute, 9router, sub2api, CLIProxyAPI…)</td><td>La connexion Free, Pro ou Max est réservée à l'usage ordinaire de Claude Code et des applications d'Anthropic ; faire transiter ou mutualiser ces identifiants par un outil tiers est interdit, et Anthropic peut sanctionner sans préavis. Risque de blocage du compte. (free-claude-code, lui, ne te donne pas Claude : il branche Claude Code sur d'autres modèles, NVIDIA NIM et autres, et ton code part chez ces fournisseurs.)</td><td><span class="pill bad">Interdit</span></td></tr>
+              <tr><td>Méga-paquets (ECC, gstack)</td><td>ECC (292 skills, 68 agents, 94 commandes) déborde à lui seul du budget de 1 % de la liste des skills, et les déclenchements se dégradent ; gstack (23 rôles et 8 outils en commandes) impose un flux complet qui recoupe Superpowers. Prendre un skill à la fois si besoin.</td><td><span class="pill skip">Éviter</span></td></tr>
               <tr><td>claude-context (Zilliz), mem0, Graphiti, Letta</td><td>Ton code part vers des services d'embedding, ou c'est de l'infrastructure pour construire ses propres agents.</td><td><span class="pill skip">Hors sujet</span></td></tr>
               <tr><td>BMAD, SuperClaude, spec-kit</td><td>Cérémonie lourde pour un créateur solo ; recoupent Superpowers.</td><td><span class="pill skip">Éviter</span></td></tr>
             </tbody>
@@ -710,7 +718,7 @@ ce qui a échoué et pourquoi, et la prochaine étape. Dix lignes maximum.</pre>
 
         <div class="callout">
           <strong>Sécurité</strong>
-          Un audit de Snyk sur 3 984 skills publiés sur des annuaires communautaires a trouvé une faille critique dans 13,4 % d'entre eux. Avant d'activer un plugin : lire son <code>SKILL.md</code> et son <code>hooks/hooks.json</code>, préférer la marketplace officielle, puis vérifier <code>/hooks</code> et <code>/mcp</code> après l'installation.
+          Un audit de Snyk (février 2026) sur 3 984 skills publiés sur ClawHub et skills.sh a trouvé au moins un problème de sécurité critique dans 13,4 % d'entre eux (534 skills). Avant d'activer un plugin : lire son <code>SKILL.md</code> et son <code>hooks/hooks.json</code>, préférer la marketplace officielle (Anthropic y précise qu'il ne contrôle pas le contenu des plugins tiers, comme Superpowers ou Context7), puis vérifier <code>/hooks</code> et <code>/mcp</code> après l'installation.
         </div>
       </section>
 
@@ -1031,13 +1039,14 @@ Audio: clear voice, quiet room tone, faint street noise. No music.</pre></div>
         </div>
 
         <div class="code"><span class="label">Claude Code · Git Bash sous Windows</span><pre>git clone -b claude/claude-workflow-video-optimization-ycjfiw https://github.com/mattreveyrand/mattreveyrand.github.io.git
+mkdir -p ~/.claude/skills ~/Projets
 cp -r mattreveyrand.github.io/studio-ia/skills/* ~/.claude/skills/
 cp -r mattreveyrand.github.io/studio-ia/templates/projet-video ~/Projets/ma-premiere-video</pre></div>
-        <p>Redémarre ensuite Claude Code : les skills sont lus au démarrage. Pour claude.ai ou Cowork, zippe le dossier d'un skill et importe-le dans Réglages → Personnaliser → Skills.</p>
+        <p>Pas besoin de redémarrer : Claude Code détecte en cours de session les skills ajoutés dans ~/.claude/skills. Seule exception : si ce dossier n'existait pas au lancement de la session, tape /reload-skills. Pour claude.ai ou Cowork (qui ne lit pas ~/.claude/skills), zippe le dossier d'un skill et importe-le dans Personnaliser → Skills (claude.ai/customize/skills), bouton « + » puis « Upload a skill ». Dans ce cas, inutile de le copier aussi dans ~/.claude/skills : Claude Code connecté à ton compte le récupère tout seul, sinon il apparaît en double.</p>
 
         <h3>La checklist</h3>
         <ol class="steps">
-          <li><div>Une session par tâche ; modèle et effort choisis au départ. <code>/clear</code> entre deux sujets.</div></li>
+          <li><div>Une session par tâche ; modèle choisi au départ. <code>/clear</code> entre deux sujets.</div></li>
           <li><div>CLAUDE.md court ; le reste en <code>rules/</code>, en skills et dans le second cerveau.</div></li>
           <li><div><code>/usage</code> une fois par semaine : ce qui pèse sans servir s'en va.</div></li>
           <li><div>Actifs verrouillés avant de générer : planche personnage ou Soul ID, décor, objet.</div></li>

@@ -4,7 +4,7 @@
           <button type="button" class="seek" data-seek="artefacts"></button>
           <h2>Artefacts : des pages que Claude publie pour toi</h2>
         </header>
-        <p class="intro">Un artefact est une page web que Claude écrit et héberge sur claude.ai. Elle est privée par défaut ; tu obtiens un lien que tu choisis de partager. Quand Claude la corrige, elle est republiée au même lien. Cette page-ci, avec sa vidéo, est un artefact.</p>
+        <p class="intro">Un artefact est une page web que Claude écrit et héberge sur claude.ai. Elle est privée par défaut ; tu obtiens un lien que tu choisis de partager. Sur Pro et Max, partager veut dire lien public ; une page qui appelle un connecteur (Higgsfield, Drive…) ne peut pas être publique et reste donc privée. Quand Claude la corrige, elle est republiée au même lien. Cette page-ci, avec sa vidéo, est un artefact.</p>
 
         <div class="grid">
           <div class="panel m">
@@ -20,7 +20,7 @@
             <h4>Ce qu'elle ne fait pas</h4>
             <ul>
               <li>Charger des scripts hors des CDN autorisés, intégrer YouTube ou un autre site en iframe.</li>
-              <li>Lancer un téléchargement ou une impression depuis la page.</li>
+              <li>Lancer d'elle-même un téléchargement ou une impression (pour proposer un bouton « Télécharger », Claude doit déclarer la capacité de téléchargement, disponible selon ton compte).</li>
               <li>Garder des données fiables dans le navigateur du visiteur : pour ça, il faut une capacité de stockage partagé.</li>
             </ul>
           </div>
@@ -33,5 +33,5 @@
           <li><strong>Proposition client</strong> : une page propre avec la vidéo de démonstration et le devis.</li>
           <li><strong>Bibliothèque de prompts</strong> : tes meilleurs prompts Seedance filtrables par type de plan.</li>
         </ul>
-        <p>Il suffit de demander : « fais-en un artefact que je peux partager ». Dans Claude Code, <code>/artifacts</code> liste ceux que tu possèdes.</p>
+        <p>Il suffit de demander : « fais-en un artefact que je peux partager ». Dans Claude Code, <code>/artifacts</code> liste ceux que tu possèdes et ceux qu'on t'a partagés, et permet d'en rattacher un à la session pour le modifier au même lien.</p>
       </section>

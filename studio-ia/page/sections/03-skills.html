@@ -4,7 +4,7 @@
           <button type="button" class="seek" data-seek="skills"></button>
           <h2>Skills : le savoir-faire rangé en tiroirs</h2>
         </header>
-        <p class="intro">Un skill est un dossier qui contient un fichier <code>SKILL.md</code> : un nom, une description, puis la méthode. Claude ne voit au départ que le nom et la description. Il lit la méthode quand ta demande correspond, et n'ouvre les fichiers annexes que s'il en a besoin. Cent skills bien décrits coûtent donc peu ; un seul skill mal découpé peut coûter cher à chaque appel.</p>
+        <p class="intro">Un skill est un dossier qui contient un fichier <code>SKILL.md</code> : un nom, une description, puis la méthode. Claude ne voit au départ que le nom et la description. Il lit la méthode quand ta demande correspond, et n'ouvre les fichiers annexes que s'il en a besoin. Des dizaines de skills bien décrits coûtent donc peu, mais pas rien : chaque description est relue à chaque tour, et au-delà d'un budget (1 % de la fenêtre) Claude Code coupe les descriptions des skills les moins utilisés, qui ne se déclenchent plus. <code>/skill-doctor</code> montre ce que chacun coûte. Un seul skill mal découpé peut coûter cher à chaque appel.</p>
 
         <div class="grid">
           <div class="panel m">
@@ -60,7 +60,7 @@ description: >
               <tr><td>Claude Code, personnel</td><td><code>~/.claude/skills/&lt;nom&gt;/SKILL.md</code></td><td>Tous tes projets</td></tr>
               <tr><td>Claude Code, projet</td><td><code>.claude/skills/&lt;nom&gt;/SKILL.md</code></td><td>Ce dépôt (partagé via Git)</td></tr>
               <tr><td>Claude Code, plugin</td><td><code>/plugin install &lt;nom&gt;@&lt;marketplace&gt;</code></td><td>Selon l'activation du plugin</td></tr>
-              <tr><td>claude.ai et Cowork</td><td>Réglages → Personnaliser (<em>Customize</em>) → Skills : importer un .zip du dossier</td><td>Ton compte (l'exécution de code doit être active)</td></tr>
+              <tr><td>claude.ai et Cowork</td><td>Personnaliser (<em>Customize</em>, dans la barre latérale) → Skills, puis « + » → « Upload a skill » : importer un .zip du dossier</td><td>Ton compte : claude.ai, Cowork, et aussi Claude Code quand tu es connecté avec ce compte (synchronisation automatique) ; n'installe donc pas le même skill aux deux endroits. L'exécution de code doit être active (Réglages → Capacités → « Exécution de code et création de fichiers »).</td></tr>
             </tbody>
           </table>
         </div>

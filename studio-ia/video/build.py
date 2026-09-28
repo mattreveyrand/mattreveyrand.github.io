@@ -356,7 +356,7 @@ def sc_context(s: Scene):
     svg, bottom = para(64, 540, "Le cache de prompt rend la relecture du début au moins 10× moins chère, tant que ce début ne change pas.",
                        22, 1150, fill=C["chalk"], weight=500)
     s.add(svg, 4.4, 0.7)
-    s.add(para(64, bottom + 40, "Changer de modèle, brancher un MCP ou un plugin en cours de session fait repartir le cache de zéro.",
+    s.add(para(64, bottom + 40, "Changer de modèle, compacter ou laisser la session dormir fait repartir le cache de zéro.",
                19, 1150, fill=C["mute"])[0], 5.2, 0.7)
 
 
@@ -453,7 +453,7 @@ def sc_tokens(s: Scene):
         ("CLAUDE.md court", "moins de 200 lignes ; le conditionnel va dans rules/ et skills/"),
         ("CLI > skill > MCP", "une CLI appelée en Bash ne coûte rien tant qu'on ne l'utilise pas"),
         ("Sous-agents", "l'exploration lourde tourne ailleurs ; seul le résumé revient"),
-        ("Modèle fixé", "choisir modèle et effort au début : changer en route vide le cache"),
+        ("Modèle fixé", "choisir le modèle au début : en changer en route vide le cache"),
         ("Plan d'abord", "Shift+Tab → plan mode : valider avant d'écrire évite de tout refaire"),
     ]
     tw, th = 272, 150
@@ -601,7 +601,7 @@ def sc_seedance(s: Scene):
 def sc_end(s: Scene):
     s.static(rect(0, 0, W, H, C["bg"]))
     s.add(text(64, 150, "Ta checklist de tournage", 64, C["chalk"], FD, 800), 0.2, 0.7)
-    items = [("1", "Une session par tâche, modèle et effort fixés au départ.", C["blue"]),
+    items = [("1", "Une session par tâche, modèle choisi au départ.", C["blue"]),
              ("2", "CLAUDE.md court ; le reste en rules/, skills/ et second cerveau.", C["yellow"]),
              ("3", "Brouillon 480p et devis ; la bonne prise s'agrandit (upscale).", C["yellow"]),
              ("4", "Genjutsu : une vidéo (video), des images (image), des media_id.", C["red"]),

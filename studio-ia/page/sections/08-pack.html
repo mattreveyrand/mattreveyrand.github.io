@@ -3,14 +3,14 @@
           <span class="plan"><i style="background:var(--s-green)"></i>Hors vidéo</span>
           <h2>Le pack : ce qu'il faut installer, et ce qu'il faut éviter</h2>
         </header>
-        <p class="intro">Recherche du 28 septembre 2026 : dépôts vérifiés un par un, tests indépendants quand ils existent. Les chiffres annoncés par les auteurs sont souvent 3 à 8 fois supérieurs à ce que mesurent les tests indépendants. Règle : installer un outil à la fois, et regarder <code>/usage</code> pendant une semaine avant d'ajouter le suivant.</p>
+        <p class="intro">Recherche du 28 septembre 2026 : dépôts vérifiés un par un, tests indépendants quand ils existent. Les chiffres annoncés par les auteurs sont souvent 2 à 8 fois supérieurs à ce que mesurent les tests indépendants, et parfois de signe contraire (RTK). Règle : installer un outil à la fois, et regarder <code>/usage</code> pendant une semaine avant d'ajouter le suivant. Sous Windows, vérifier d'abord que <code>node</code> (Ponytail, caveman, Context7) et <code>python</code> (planning-with-files, dont les hooks sont lents sans lui) répondent dans Git Bash.</p>
 
         <h3>Déjà là, gratuit, à utiliser d'abord</h3>
         <div class="tbl">
           <table>
             <thead><tr><th scope="col">Réglage ou commande</th><th scope="col">Ce que ça apporte</th></tr></thead>
             <tbody>
-              <tr><td><code>/usage</code></td><td>Sur Pro et Max : part de la consommation attribuée à chaque skill, plugin, sous-agent et serveur MCP. C'est l'outil pour juger tout le reste.</td></tr>
+              <tr><td><code>/usage</code></td><td>Sur Pro et Max : part de la consommation attribuée à chaque skill, plugin, sous-agent et serveur MCP. C'est l'outil pour juger tout le reste ; il ne compte que l'historique de Claude Code sur cette machine (ni claude.ai, ni tes autres appareils).</td></tr>
               <tr><td><code>/context</code>, <code>/doctor</code></td><td>Ce qui remplit la fenêtre ; coût de la liste des skills et plus gros contributeurs.</td></tr>
               <tr><td>Mémoire auto</td><td>Active par défaut. Index <code>MEMORY.md</code> dont les 200 premières lignes (25 Ko max) sont chargées à chaque session ; fiches thématiques lues à la demande.</td></tr>
               <tr><td>Budget de la liste des skills</td><td>Noms et descriptions de tous les skills tiennent dans environ 1 % de la fenêtre. Au-delà, des descriptions sont retirées et les skills se déclenchent mal. Pour tes skills personnels ou de projet rarement utiles : mode « nom seul » (<code>skillOverrides</code>) ou <code>disable-model-invocation: true</code> pour ceux que tu appelles toujours à la main. Les skills livrés par un plugin ne sont pas concernés : on les gère avec <code>/plugin</code> (désactiver le plugin). <code>/skill-doctor</code> liste ceux qui ne servent jamais.</td></tr>
@@ -35,7 +35,7 @@
               <tr>
                 <td><strong>planning-with-files</strong><br><span class="sources">OthmanAdi</span></td>
                 <td>Plan, découvertes et progression écrits sur disque (<code>task_plan.md</code>, <code>findings.md</code>, <code>progress.md</code>) et réinjectés à chaque tour.</td>
-                <td>Rend <code>/clear</code> sans risque, et <code>/clear</code> est le levier le moins cher qui existe. Gains mesurés par l'auteur seulement.</td>
+                <td>Rend <code>/clear</code> sans risque, et <code>/clear</code> est le levier le moins cher qui existe. Gains mesurés par l'auteur seulement. Dans un dépôt où Superpowers écrit déjà son plan, n'en garder qu'un des deux pour éviter deux plans concurrents.</td>
                 <td><code>/plugin marketplace add OthmanAdi/planning-with-files</code><br><code>/plugin install planning-with-files@planning-with-files</code></td>
                 <td><span class="pill must">Indispensable</span></td>
               </tr>
@@ -43,7 +43,7 @@
                 <td><strong>ccstatusline</strong><br><span class="sources">sirmalloc</span></td>
                 <td>Barre d'état : modèle, % de contexte, git, consommation. Zéro token.</td>
                 <td>Tu vois quand faire <code>/clear</code>.</td>
-                <td><code>npx -y ccstatusline@latest</code> puis « Pinned global install »</td>
+                <td><code>npx -y ccstatusline@latest</code> puis « Pinned global install »<br>Une seule barre d'état possible : refuse celles que proposent ensuite Ponytail, context-mode ou l'installateur complet de caveman.</td>
                 <td><span class="pill must">Indispensable</span></td>
               </tr>
               <tr>
@@ -56,14 +56,14 @@
               <tr>
                 <td><strong>Superpowers</strong><br><span class="sources">obra · marketplace officielle</span></td>
                 <td>Méthode complète pour le code : brainstorming → plan → tests d'abord → revue par sous-agent.</td>
-                <td>Plus de qualité ; plus de tokens sur les petites tâches (choisir <em>executing-plans</em> pour le petit travail).</td>
-                <td><code>/plugin install superpowers@claude-plugins-official</code></td>
+                <td>Aucun test indépendant de qualité publié ; mesures tierces mitigées sur les tokens, plus chères sur les petites tâches. Pour le petit travail, choisir <em>executing-plans</em> : exécution dans la session et une seule revue à la fin, la voie la moins chère selon son README.</td>
+                <td><code>/plugin install superpowers@claude-plugins-official</code><br>Puis <code>SUPERPOWERS_DISABLE_TELEMETRY=1</code> pour couper le logo chargé depuis primeradiant.com.</td>
                 <td><span class="pill must">Pour le code</span></td>
               </tr>
               <tr>
                 <td><strong>Ponytail</strong><br><span class="sources">DietrichGebert</span></td>
                 <td>Échelle « le moins de code possible » avant d'écrire : réutiliser, bibliothèque standard, une ligne.</td>
-                <td>Seul économiseur avec un gain indépendant significatif : environ −10 % de coût et −15 % de code sur la charge testée (JetBrains, 80 paires ; l'intervalle de confiance frôle zéro).</td>
+                <td>Seul économiseur avec un gain indépendant significatif : environ −10 % de coût et −15 % de code sur la charge testée (JetBrains, 80 paires, p = 0,004, qualité inchangée ; le gain se concentre sur les grosses tâches).</td>
                 <td><code>/plugin marketplace add DietrichGebert/ponytail</code><br><code>/plugin install ponytail@ponytail</code></td>
                 <td><span class="pill must">Pour le code</span></td>
               </tr>
@@ -82,10 +82,17 @@
                 <td><span class="pill nice">Si tu codes</span></td>
               </tr>
               <tr>
+                <td><strong>typescript-lsp / pyright-lsp</strong><br><span class="sources">officiel Anthropic</span></td>
+                <td>Navigation par symbole (définition, références) et erreurs de type signalées après chaque modification.</td>
+                <td>Recommandé par la doc officielle des coûts : un appel remplace un grep suivi de plusieurs lectures de fichiers.</td>
+                <td><code>/plugin install typescript-lsp@claude-plugins-official</code> + <code>npm install -g typescript-language-server typescript</code><br><code>/plugin install pyright-lsp@claude-plugins-official</code> + <code>npm install -g pyright</code></td>
+                <td><span class="pill nice">Sites en TS/JS, scripts Python</span></td>
+              </tr>
+              <tr>
                 <td><strong>caveman</strong> (skill seul, mode lite)<br><span class="sources">JuliusBrussee</span></td>
                 <td>Réponses télégraphiques ; <code>/caveman-compress CLAUDE.md</code> raccourcit un fichier mémoire d'environ 46 %.</td>
-                <td>Annonce 65 % ; mesuré −8,5 % de tokens de sortie (JetBrains). Ses règles ajoutent ~1 000 tokens par appel.</td>
-                <td><code>claude plugin marketplace add JuliusBrussee/caveman</code><br><code>claude plugin install caveman@caveman</code></td>
+                <td>Annonçait 65 % ; JetBrains mesure −8,5 % de tokens de sortie, qualité inchangée ; le benchmark agentique de Ponytail le trouve à +7 % de tokens. Ses règles ajoutent ~1 000 tokens par appel.</td>
+                <td><code>claude plugin marketplace add JuliusBrussee/caveman</code><br><code>claude plugin install caveman@caveman</code><br>Le plugin s'allume seul en mode <em>full</em> à chaque session : crée <code>%APPDATA%\caveman\config.json</code> (Windows ; <code>~/.config/caveman/config.json</code> ailleurs) contenant <code>{"defaultMode":"off"}</code>, puis un <code>.caveman.json</code> contenant <code>{"defaultMode":"lite"}</code> à la racine de chaque dépôt de code.</td>
                 <td><span class="pill nice">Pour le code, jamais pour l'écriture</span></td>
               </tr>
               <tr>
@@ -99,16 +106,17 @@
           </table>
         </div>
         <p>Un seul cadre de travail : Superpowers <em>ou</em> compound-engineering <em>ou</em> GSD Core. Les empiler multiplie les hooks, les skills et les tokens.</p>
+        <p>Les plugins « Pour le code » (Superpowers, Ponytail, caveman) se chargent sinon dans toutes tes sessions, vidéo comprises : Ponytail s'active en mode <em>full</em> à chaque session et s'injecte aussi dans chaque sous-agent. Dans une session, <code>/plugin install</code> ouvre un panneau qui demande la portée : lance-le depuis chaque dépôt de code et choisis « Install for you, in this repo only » (portée locale).</p>
 
         <h3>À éviter</h3>
         <div class="tbl">
           <table>
             <thead><tr><th scope="col">Outil</th><th scope="col">Pourquoi</th><th scope="col">Verdict</th></tr></thead>
             <tbody>
-              <tr><td><strong>claude-mem</strong></td><td>Son « observateur » en arrière-plan fait tourner Claude sur chaque transcript : un ticket ouvert en septembre 2026 mesure 43 % du trafic de tokens consommé par lui seul (7,9 M en 4 h). La mémoire auto intégrée couvre l'essentiel.</td><td><span class="pill skip">Éviter</span></td></tr>
-              <tr><td><strong>RTK</strong> et hooks de compression Bash</td><td>Annonce 60 à 90 % ; mesuré +7,6 % de coût à effort bas (JetBrains). Les outils Read, Grep et Glob de Claude Code passent à côté du hook. À garder seulement si <code>/usage</code> montre un gain sur ton travail.</td><td><span class="pill warn">Mesurer d'abord</span></td></tr>
-              <tr><td>Routeurs « Claude gratuit » (OmniRoute, 9router, free-claude-code, sub2api…)</td><td>Les conditions d'Anthropic interdisent de faire passer des identifiants Pro ou Max par une application tierce. Risque de blocage du compte.</td><td><span class="pill bad">Interdit</span></td></tr>
-              <tr><td>Méga-paquets (ECC, gstack)</td><td>Des centaines de skills et de commandes : la liste déborde du budget de 1 % et les déclenchements se dégradent. Prendre un skill à la fois si besoin.</td><td><span class="pill skip">Éviter</span></td></tr>
+              <tr><td><strong>claude-mem</strong></td><td>Son « observateur » en arrière-plan résume chaque appel d'outil avec un LLM : sur ton forfait Anthropic, ou sur le service hébergé de claude-mem que l'installateur pousse à activer (tes transcripts partent chez eux ; après 30 jours d'essai, retour sur ton forfait sans abonnement). Un ticket ouvert le 13 septembre 2026 (#4070) mesure l'observateur à 43 % du trafic de tokens observé (7,9 M en 4 h, surtout de l'écriture de cache). La mémoire auto intégrée couvre l'essentiel.</td><td><span class="pill skip">Éviter</span></td></tr>
+              <tr><td><strong>RTK</strong> et hooks de compression Bash</td><td>Réduit « jusqu'à 90 % » de la sortie Bash lue par l'agent, ce qui n'est pas 90 % de la facture, précise son propre README ; mesuré +7,6 % de coût médian par tâche à effort bas et neutre (+0,1 %) à effort haut (JetBrains). Les outils Read, Grep et Glob de Claude Code passent à côté du hook. À garder seulement si <code>/usage</code> montre un gain sur ton travail.</td><td><span class="pill warn">Mesurer d'abord</span></td></tr>
+              <tr><td>Routeurs d'abonnement (OmniRoute, 9router, sub2api, CLIProxyAPI…)</td><td>La connexion Free, Pro ou Max est réservée à l'usage ordinaire de Claude Code et des applications d'Anthropic ; faire transiter ou mutualiser ces identifiants par un outil tiers est interdit, et Anthropic peut sanctionner sans préavis. Risque de blocage du compte. (free-claude-code, lui, ne te donne pas Claude : il branche Claude Code sur d'autres modèles, NVIDIA NIM et autres, et ton code part chez ces fournisseurs.)</td><td><span class="pill bad">Interdit</span></td></tr>
+              <tr><td>Méga-paquets (ECC, gstack)</td><td>ECC (292 skills, 68 agents, 94 commandes) déborde à lui seul du budget de 1 % de la liste des skills, et les déclenchements se dégradent ; gstack (23 rôles et 8 outils en commandes) impose un flux complet qui recoupe Superpowers. Prendre un skill à la fois si besoin.</td><td><span class="pill skip">Éviter</span></td></tr>
               <tr><td>claude-context (Zilliz), mem0, Graphiti, Letta</td><td>Ton code part vers des services d'embedding, ou c'est de l'infrastructure pour construire ses propres agents.</td><td><span class="pill skip">Hors sujet</span></td></tr>
               <tr><td>BMAD, SuperClaude, spec-kit</td><td>Cérémonie lourde pour un créateur solo ; recoupent Superpowers.</td><td><span class="pill skip">Éviter</span></td></tr>
             </tbody>
@@ -117,6 +125,6 @@
 
         <div class="callout">
           <strong>Sécurité</strong>
-          Un audit de Snyk sur 3 984 skills publiés sur des annuaires communautaires a trouvé une faille critique dans 13,4 % d'entre eux. Avant d'activer un plugin : lire son <code>SKILL.md</code> et son <code>hooks/hooks.json</code>, préférer la marketplace officielle, puis vérifier <code>/hooks</code> et <code>/mcp</code> après l'installation.
+          Un audit de Snyk (février 2026) sur 3 984 skills publiés sur ClawHub et skills.sh a trouvé au moins un problème de sécurité critique dans 13,4 % d'entre eux (534 skills). Avant d'activer un plugin : lire son <code>SKILL.md</code> et son <code>hooks/hooks.json</code>, préférer la marketplace officielle (Anthropic y précise qu'il ne contrôle pas le contenu des plugins tiers, comme Superpowers ou Context7), puis vérifier <code>/hooks</code> et <code>/mcp</code> après l'installation.
         </div>
       </section>
